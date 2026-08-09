@@ -5,6 +5,31 @@ HTML / CSS / JS خالص — مفيش frameworks ولا build step. ارفع ا�
 
 النسخة الأولى لسه موجودة في الفولدر الأب ومشتغلة.
 
+## 🔗 اللينك اللايف
+
+**https://nedal-elnono.github.io/velaxa-landing-preview/**
+
+## النشر والتحديث
+
+```bash
+./deploy.sh "وصف التعديل"     # بيرفع على الريبو الخاص + اللينك اللايف
+```
+
+الصفحة بتتحدث خلال 30–60 ثانية.
+
+| الريبو | النوع | الدور |
+|---|---|---|
+| `Nedal-Elnono/velaxa-landing` | **private** | مصدر المشروع |
+| `Nedal-Elnono/velaxa-landing-preview` | public | اللي GitHub Pages بيقدّم منه |
+
+**ليه ريبو تاني عام؟** GitHub Pages مش بيشتغل على ريبو private إلا في خطة Pro
+المدفوعة. الريبو الأساسي فضل private زي ما هو مطلوب، والعام ده مجرد وجهة نشر —
+تقدر تمسحه في أي وقت من غير ما يأثر على المشروع.
+
+**بديل:** فيه نسخة كمان على Cloudflare Pages
+(`velaxa-landing.pages.dev`) بس دومين `pages.dev` طلع محجوب على شبكتك، عشان كده
+GitHub Pages هو اللينك المعتمد.
+
 ## تشغيل
 
 ```bash
