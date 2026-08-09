@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Velaxa Clinic — Dental Implants in Turkey | All-Inclusive Packages</title>
+  <meta name="description" content="Dental implants in Turkey with German & Swiss implant systems. All-inclusive All-on-4 & All-on-6 packages with 5-star hotel and VIP transfers. 15-year warranty." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Only the five faces the stylesheet actually uses: 400/500/600/700 + italic 700 -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="icon" href="assets/favicon.png" />
+
+  <!-- The hero cut-out is the largest-contentful paint; start it with the HTML -->
+  <link rel="preload" as="image" href="assets/hero-patient.webp"
+        imagesrcset="assets/hero-patient.webp 1x, assets/hero-patient@2x.webp 2x"
+        media="(min-width: 861px)" />
+</head>
+<body>
+
+<!-- ═══════════════════════════ NAVBAR ═══════════════════════════ -->
+<header class="nav" id="top">
+  <div class="shell nav-inner">
+    <a href="#top" class="logo" aria-label="Velaxa Clinic — home">
+      <span class="logo-icon" aria-hidden="true"></span>
+      <span class="logo-word" role="img" aria-label="Velaxa"></span>
+    </a>
+
+    <nav class="nav-links" id="nav-links" aria-label="Main">
+      <a href="#top">Home</a>
+      <a href="#trust">Accreditations</a>
+      <a href="#results">Results</a>
+      <a href="#packages">Packages</a>
+      <a href="#why">Why Velaxa</a>
+    </nav>
+
+    <a href="#book" class="pill-btn nav-cta">
+      Get Started
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+
+    <button class="nav-toggle" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ═══════════════════════════ HERO ═══════════════════════════ -->
+<section class="hero">
+  <div class="shell">
+    <div class="panel">
+
+      <!-- Cut-out patient shot. Swap the file and it keeps its place: the CSS
+           anchors it by height, not by the image's own framing. -->
+      <picture>
+        <!-- Hidden below 860px, so hand narrow screens a 1px placeholder rather
+             than a hero image they will never see. -->
+        <source media="(max-width: 860px)"
+                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
+        <source srcset="assets/hero-patient.webp 1x, assets/hero-patient@2x.webp 2x" />
+        <img class="panel-photo" src="assets/hero-patient.webp"
+             width="900" height="934" decoding="async" fetchpriority="high"
+             alt="Velaxa patient smiling after dental implant treatment" />
+      </picture>
+
+      <p class="rule-label panel-label">Istanbul, Türkiye</p>
+
+      <!-- Booking card -->
+      <div class="hero-card">
+        <h1>Dental Implants<br /><span class="accent">in Turkey</span></h1>
+
+        <ul class="card-points" role="list">
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 10.4 3.5 2-.8 1.3L11 13V6.5h2v5.9Z"/></svg>
+            +10 Year Experience
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.5-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4-6.1 6.1Z"/></svg>
+            +15 Years Warranty
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 15.9l-6.1 3.5 1.5-6.8L2.2 8l6.9-.7L12 1Z"/></svg>
+            German and Swiss implants
+          </li>
+        </ul>
+
+        <!-- Short lead form, per the brief. The Reference field lives on the
+             full form further down the page to keep this one short. -->
+        <form class="card-form lead-form" novalidate>
+          <p class="card-form-title">Book Your Consultation Now</p>
+
+          <div class="f">
+            <label for="h-name">Full name</label>
+            <input type="text" id="h-name" name="fullName" placeholder="John Carter" autocomplete="name" required />
+          </div>
+
+          <div class="f-row">
+            <div class="f">
+              <label for="h-country">Country residence</label>
+              <select id="h-country" name="country" data-country required>
+                <option value="" selected disabled>Select</option>
+              </select>
+            </div>
+            <div class="f state-f">
+              <label for="h-state">State</label>
+              <select id="h-state" name="state" data-state>
+                <option value="" selected disabled>Select</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="f">
+            <label for="h-phone">WhatsApp number</label>
+            <div class="f-phone">
+              <select id="h-code" name="countryCode" data-code aria-label="Country code"></select>
+              <input type="tel" id="h-phone" name="whatsapp" placeholder="(555) 123-4567" autocomplete="tel" required />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-dark btn-full">Book Your Consultation Now</button>
+          <p class="f-status" role="status" aria-live="polite"></p>
+        </form>
+
+        <div class="card-or"><span>or</span></div>
+
+        <a href="#" class="btn btn-wa btn-full" data-whatsapp>
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
+          Contact Us Now
+        </a>
+      </div>
+
+      <!-- floating stat cards — wrapper only matters on mobile, where it becomes a row -->
+      <div class="chips">
+      <div class="chip-card chip-1">
+        <span class="chip-ico ico-amber" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.5-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4-6.1 6.1Z"/></svg>
+        </span>
+        <span><strong>15 Years</strong><small>Warranty</small></span>
+      </div>
+
+      <div class="chip-card chip-2">
+        <span class="chip-ico ico-mint" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-2.4.8A4 4 0 0 0 4 7c0 3.3 1 5.4 1.6 8.6.4 2.3.6 4.4 1.8 5.1 1.5.9 2.3-1 2.6-3 .3-1.8.4-3.7 2-3.7s1.7 1.9 2 3.7c.3 2 1.1 3.9 2.6 3 1.2-.7 1.4-2.8 1.8-5.1C19 12.4 20 10.3 20 7a4 4 0 0 0-5.6-4.2A4 4 0 0 0 12 2Z"/></svg>
+        </span>
+        <span><strong>Velaxa</strong><small>Istanbul, Türkiye</small></span>
+      </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ CERTIFICATION MARQUEE ═══════════════════ -->
+<!-- Add a logo by dropping one more <li> in here — the loop rebuilds itself. -->
+<section class="marquee-band" id="trust" aria-label="Certifications and accreditations">
+  <div class="shell">
+    <header class="section-head strip-head">
+      <h2>Immediate <span class="accent">Trust</span> Strip</h2>
+    </header>
+    <div class="marquee">
+      <ul class="marquee-track" role="list">
+        <li><img src="assets/cert-moh-turkey.webp" width="320" height="320" loading="lazy" decoding="async" alt="Republic of Türkiye Ministry of Health" /></li>
+        <li><img src="assets/cert-tdb.webp" width="320" height="320" loading="lazy" decoding="async" alt="Turkish Dental Association (TDB)" /></li>
+        <li><img src="assets/cert-iso.webp" width="320" height="320" loading="lazy" decoding="async" alt="ISO Certified Company" /></li>
+        <li><img src="assets/cert-15yr-warranty.webp" width="320" height="320" loading="lazy" decoding="async" alt="15 Year Warranty" /></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ BEFORE & AFTER ═══════════════════ -->
+<section class="section" id="results">
+  <div class="shell">
+    <header class="section-head">
+      <h2>Real <span class="accent">Patients</span></h2>
+      <p>The Difference, Side by Side</p>
+    </header>
+
+    <!-- Real Velaxa patients. All six shots are cropped to the same framing so the
+         slider compares like with like. Treatment names are intentionally left off
+         until the clinic confirms what each patient actually had. -->
+    <div class="ba-grid">
+      <figure class="ba-card">
+        <div class="ba-box" data-ba>
+          <img class="ba-img ba-after" src="assets/cases/case1-after.webp"
+               width="1120" height="924" loading="lazy" decoding="async"
+               alt="Monika after treatment" />
+          <img class="ba-img ba-before" src="assets/cases/case1-before.webp"
+               width="1120" height="924" loading="lazy" decoding="async"
+               alt="Monika before treatment" />
+          <span class="ba-line" aria-hidden="true"><span class="ba-knob"></span></span>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare Monika's before and after" />
+          <span class="ba-tag tag-before">Before</span>
+          <span class="ba-tag tag-after">After</span>
+        </div>
+        <figcaption><strong>Monika</strong></figcaption>
+      </figure>
+
+      <figure class="ba-card">
+        <div class="ba-box" data-ba>
+          <img class="ba-img ba-after" src="assets/cases/case2-after.webp"
+               width="1120" height="924" loading="lazy" decoding="async"
+               alt="Pavel after treatment" />
+          <img class="ba-img ba-before" src="assets/cases/case2-before.webp"
+               width="1120" height="924" loading="lazy" decoding="async"
+               alt="Pavel before treatment" />
+          <span class="ba-line" aria-hidden="true"><span class="ba-knob"></span></span>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare Pavel's before and after" />
+          <span class="ba-tag tag-before">Before</span>
+          <span class="ba-tag tag-after">After</span>
+        </div>
+        <figcaption><strong>Pavel</strong></figcaption>
+      </figure>
+
+      <figure class="ba-card">
+        <div class="ba-box" data-ba>
+          <img class="ba-img ba-after" src="assets/cases/case3-after.webp"
+               width="1120" height="924" loading="lazy" decoding="async"
+               alt="Serghii after treatment" />
+          <img class="ba-img ba-before" src="assets/cases/case3-before.webp"
+               width="1120" height="924" loading="lazy" decoding="async"
+               alt="Serghii before treatment" />
+          <span class="ba-line" aria-hidden="true"><span class="ba-knob"></span></span>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare Serghii's before and after" />
+          <span class="ba-tag tag-before">Before</span>
+          <span class="ba-tag tag-after">After</span>
+        </div>
+        <figcaption><strong>Serghii</strong></figcaption>
+      </figure>
+    </div>
+
+    <div class="section-cta">
+      <a href="#" class="btn btn-wa" data-whatsapp>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
+        Send your photos, get a plan
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ REVIEWS ═══════════════════ -->
+<section class="section" id="reviews">
+  <div class="shell">
+    <header class="section-head">
+      <p class="rule-label center">Verified reviews</p>
+      <h2>What Our Patients <span class="accent">Say</span></h2>
+    </header>
+
+    <div class="score-row">
+      <div class="score">
+        <svg class="g-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="M21.6 12.2c0-.7-.1-1.4-.2-2H12v3.9h5.4a4.6 4.6 0 0 1-2 3v2.6h3.2c1.9-1.8 3-4.4 3-7.5Z"/><path d="M12 22c2.7 0 5-.9 6.6-2.4l-3.2-2.5c-.9.6-2 1-3.4 1a5.9 5.9 0 0 1-5.6-4.1H3.1v2.6A10 10 0 0 0 12 22Z"/><path d="M6.4 13.9a6 6 0 0 1 0-3.8V7.5H3.1a10 10 0 0 0 0 9l3.3-2.6Z"/><path d="M12 5.9c1.5 0 2.8.5 3.9 1.5L18.7 4.6A10 10 0 0 0 3.1 7.5l3.3 2.6A5.9 5.9 0 0 1 12 5.9Z"/></svg>
+        <span><strong>4.8 <i class="stars">★★★★★</i></strong><small>Google Maps · 400 reviews</small></span>
+      </div>
+      <div class="score">
+        <svg class="tp-mark" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 15.9l-6.1 3.5 1.5-6.8L2.2 8l6.9-.7L12 1Z"/></svg>
+        <span><strong>4.5 <i class="stars">★★★★★</i></strong><small>Trustpilot · 48 reviews</small></span>
+      </div>
+    </div>
+
+    <!-- Replace with real reviews before launch.
+         Same marquee mechanism as the certification strip: add an <li> and the
+         loop rebuilds itself. -->
+    <div class="marquee marquee-quotes">
+      <ul class="marquee-track" role="list">
+        <li><blockquote class="quote">
+        <i class="stars">★★★★★</i>
+        <p>I got quotes of $52,000 back home. Velaxa did my full mouth for a fraction of that — hotel and drivers included.</p>
+        <footer><span class="who">JM</span> Jennifer M. <small>Chicago, IL</small></footer>
+        </blockquote></li>
+        <li><blockquote class="quote">
+        <i class="stars">★★★★★</i>
+        <p>From the airport pickup to the final fitting, everything ran on schedule. My temporary teeth went in on day two.</p>
+        <footer><span class="who">RT</span> Robert T. <small>Phoenix, AZ</small></footer>
+        </blockquote></li>
+        <li><blockquote class="quote">
+        <i class="stars">★★★★★</i>
+        <p>The team walked me through every step over WhatsApp before I even booked my flight. Best decision in years.</p>
+        <footer><span class="who">DW</span> Diane W. <small>Tampa, FL</small></footer>
+        </blockquote></li>
+        <li><blockquote class="quote">
+        <i class="stars">★★★★★</i>
+        <p>Two visits, twenty zirconium crowns, and a written 15-year warranty. I keep catching myself smiling in the mirror.</p>
+        <footer><span class="who">MB</span> Marcus B. <small>Denver, CO</small></footer>
+        </blockquote></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ PACKAGES ═══════════════════ -->
+<section class="section section-tint" id="packages">
+  <div class="shell">
+    <header class="section-head">
+      <h2>Our All Inclusive <span class="accent">Package</span></h2>
+      <p>Regain your confidence with permanent dental implants that look and feel like
+        natural teeth. Just send us a message with your teeth photos and we will take care
+        of everything for you — from the hotel accommodation and the airport pickup until
+        you return to your home happily with your new smile.</p>
+    </header>
+
+    <div class="plan-grid">
+      <article class="plan">
+        <h3>All on 6 Dental Implants</h3>
+
+        <div class="visit">
+          <div class="visit-top"><span>1st visit for only</span><b>$3,800</b></div>
+          <ul role="list">
+            <li>12 Dental Implants</li><li>Temporary Teeth</li>
+            <li>4 days in 5 star hotel</li><li>VIP transfers</li>
+          </ul>
+        </div>
+        <div class="visit">
+          <div class="visit-top"><span>2nd visit for only</span><b>$3,000</b></div>
+          <ul role="list">
+            <li>20 Zirconium Crowns</li><li>5 days in 5 star hotel</li><li>VIP transfers</li>
+          </ul>
+        </div>
+
+        <div class="plan-total"><span>Both visits</span><b>$6,800</b></div>
+        <a href="#book" class="btn btn-dark btn-full">Book Your Treatment Today</a>
+      </article>
+
+      <article class="plan">
+        <h3>All on 4 Dental Implants</h3>
+
+        <div class="visit">
+          <div class="visit-top"><span>1st visit for only</span><b>$3,200</b></div>
+          <ul role="list">
+            <li>8 Dental Implants</li><li>Temporary Teeth</li>
+            <li>4 days in 5 star hotel</li><li>VIP transfers</li>
+          </ul>
+        </div>
+        <div class="visit">
+          <div class="visit-top"><span>2nd visit for only</span><b>$3,000</b></div>
+          <ul role="list">
+            <li>20 Zirconium Crowns</li><li>2 Titanium bars</li>
+            <li>5 days in 5 star hotel</li><li>VIP transfers</li>
+          </ul>
+        </div>
+
+        <div class="plan-total"><span>Both visits</span><b>$6,200</b></div>
+        <a href="#book" class="btn btn-dark btn-full">Book Your Treatment Today</a>
+      </article>
+    </div>
+
+    <div class="section-cta">
+      <a href="#" class="btn btn-wa" data-whatsapp>
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
+        Ask about your case on WhatsApp
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ WHY VELAXA ═══════════════════ -->
+<section class="section" id="why">
+  <div class="shell">
+    <header class="section-head">
+      <h2>Velaxa Is the <span class="accent">Right Choice</span></h2>
+      <p>From your first consultation to your final smile, every stage of your treatment is
+        planned around your case, comfort, and peace of mind.</p>
+    </header>
+
+    <div class="tile-grid">
+      <article class="tile tile-blue">
+        <span class="tile-step" aria-hidden="true">1</span>
+        <h3>A Treatment Plan Built Around You</h3>
+        <p>Your case is carefully evaluated before you travel to determine the right implant
+          solution, treatment stages, and expected timeline.</p>
+      </article>
+      <article class="tile tile-peach">
+        <span class="tile-step" aria-hidden="true">2</span>
+        <h3>Clinical Care You Can Trust</h3>
+        <p>Your treatment is performed by an experienced dental team using advanced technology
+          and trusted German and Swiss implant brands.</p>
+      </article>
+      <article class="tile tile-mint">
+        <span class="tile-step" aria-hidden="true">3</span>
+        <h3>One Team Handles Your Entire Journey</h3>
+        <p>Your appointments, hotel accommodation, and VIP transfers are arranged in advance,
+          so you can focus entirely on your treatment and recovery.</p>
+      </article>
+      <article class="tile tile-lilac">
+        <span class="tile-step" aria-hidden="true">4</span>
+        <h3>Support That Continues After Treatment</h3>
+        <p>Our team guides you between both visits and remains available for follow-up after
+          you return home, with up to 15 years of treatment warranty.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ BOOKING ═══════════════════ -->
+<section class="section" id="book">
+  <div class="shell">
+    <div class="book-panel">
+      <div class="book-copy">
+        <p class="rule-label">Free consultation</p>
+        <h2>Book Your <span class="accent">Consultation</span></h2>
+        <ul class="check-list" role="list">
+          <li>A reply on WhatsApp within one hour</li>
+          <li>Free X-ray review by our specialists</li>
+          <li>A fixed, all-inclusive price — no hidden fees</li>
+        </ul>
+        <p class="book-fine">Your details stay private. English-speaking team.</p>
+      </div>
+
+      <form class="book-form lead-form" novalidate>
+        <div class="f">
+          <label for="name">Full name</label>
+          <input type="text" id="name" name="fullName" placeholder="John Carter" autocomplete="name" required />
+        </div>
+
+        <div class="f-row">
+          <div class="f">
+            <label for="country">Country residence</label>
+            <select id="country" name="country" data-country required>
+              <option value="" selected disabled>Select country</option>
+            </select>
+          </div>
+          <div class="f state-f">
+            <label for="state">State</label>
+            <select id="state" name="state" data-state>
+              <option value="" selected disabled>Select state</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="f">
+          <label for="phone">WhatsApp number</label>
+          <div class="f-phone">
+            <select id="code" name="countryCode" data-code aria-label="Country code"></select>
+            <input type="tel" id="phone" name="whatsapp" placeholder="(555) 123-4567" autocomplete="tel" required />
+          </div>
+        </div>
+
+        <div class="f">
+          <label for="ref">Reference <span class="opt">— how did you hear about us?</span></label>
+          <select id="ref" name="reference" data-ref>
+            <option value="" selected>Choose one…</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-full">Book Your Consultation Now</button>
+        <p class="f-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer class="footer">
+  <div class="shell">
+    <div class="foot-base">
+      <a href="#top" class="logo">
+        <span class="logo-icon" aria-hidden="true"></span>
+        <span class="logo-word" role="img" aria-label="Velaxa"></span>
+      </a>
+      <p>Istanbul, Türkiye · TDP Certified · ISO Certified · Health in Türkiye Accredited</p>
+      <p class="fine">© <span id="year"></span> Velaxa Clinic. Results vary by patient; the final plan is confirmed after clinical examination.</p>
+    </div>
+  </div>
+</footer>
+
+<a href="#" class="wa-float" data-whatsapp aria-label="Chat with us on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
+</a>
+
+<script src="js/main.js"></script>
+</body>
+</html>

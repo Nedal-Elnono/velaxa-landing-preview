@@ -1,0 +1,641 @@
+/* ════════════════════════════════════════════════════════════
+   Velaxa Clinic — v2
+   White page · rounded content panels · pastel tiles
+   Brand colours sampled from the official logo.
+   ════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Ground */
+  --white: #ffffff;
+  --ground: #ffffff;
+  --tint: #f7fafc;              /* alternating section wash */
+
+  /* Brand palette — supplied by the client */
+  --navy: #203f69;              /* headings, primary buttons */
+  --teal: #1c708e;              /* secondary text accent, hovers */
+  --sky: #0797d6;               /* links, labels, accent word */
+  --sky-2: #34b3e8;
+  --sky-soft: #e8f5fc;
+
+  /* Ink */
+  --ink: var(--navy);           /* headings + primary buttons */
+  --ink-2: #55677d;             /* body copy — blue-grey, tuned to the navy */
+  --line: #e6edf3;
+
+  /* Accents */
+  --coral: #e2574c;             /* error states only */
+  --gold: #e5a53f;
+  --wa: #1fa855;
+
+  /* Pastel tiles */
+  --p-blue: #eef4fb;
+  --p-peach: #fdf1ec;
+  --p-mint: #ecf7f2;
+  --p-lilac: #f3f1fb;
+
+  /* Shape */
+  --r-sm: 12px;
+  --r: 18px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --shell: 1600px;         /* hard cap; the real width is 90% of the viewport */
+  --pad: clamp(4rem, 8vw, 7rem);
+
+  --shadow-s: 0 6px 20px -12px rgba(14, 26, 36, 0.3);
+  --shadow-m: 0 18px 44px -22px rgba(14, 26, 36, 0.3);
+  --shadow-l: 0 30px 70px -30px rgba(14, 26, 36, 0.35);
+
+  --font: "Plus Jakarta Sans", "Helvetica Neue", sans-serif;
+}
+
+/* ── Base ─────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: var(--font);
+  font-size: 1.0625rem;
+  line-height: 1.62;
+  color: var(--ink-2);
+  background: var(--ground);
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 {
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.028em;
+  margin: 0 0 0.55em;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(2.3rem, 4vw, 3.4rem); }
+h2 { font-size: clamp(2.05rem, 3.6vw, 3.05rem); }
+h3 { font-size: 1.2rem; }
+p { margin: 0 0 1em; }
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+/* :where() keeps this at zero specificity so any list class can still set its
+   own margin — a plain ul[role="list"] rule would silently outrank them. */
+:where(ul[role="list"]) { list-style: none; margin: 0; padding: 0; }
+:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; border-radius: 6px; }
+
+/* One width for the whole page, so the navbar always lines up with the hero panel */
+.shell { width: min(90%, var(--shell)); margin-inline: auto; }
+.section { padding-block: var(--pad); }
+.section-tint { background: var(--tint); }
+
+/* One accent word per heading — same family, italic, brand blue.
+   No second typeface: the contrast comes from weight and colour. */
+.accent {
+  font-weight: 700;
+  font-style: italic;
+  color: var(--sky);
+}
+
+/* Small label with a leading rule, as on the reference */
+.rule-label {
+  display: inline-flex; align-items: center; gap: 0.7em;
+  font-size: 0.84rem; font-weight: 500; color: var(--sky);
+  margin: 0 0 1rem;
+}
+.rule-label::before {
+  content: ""; width: 2.4rem; height: 1.5px;
+  background: currentColor; opacity: 0.55;
+}
+.rule-label.center { justify-content: center; }
+
+.section-head { max-width: 40rem; margin: 0 auto 3rem; text-align: center; }
+.section-head p { color: var(--ink-2); margin: 0; }
+.section-head h2 { margin-bottom: 0.45em; }
+
+/* ── Buttons ──────────────────────────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.5em;
+  font-family: inherit; font-size: 0.98rem; font-weight: 500;
+  padding: 0.82em 1.5em; border-radius: 999px;
+  border: 1.5px solid transparent; cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease, color 0.2s ease,
+              border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.btn:hover { transform: translateY(-2px); }
+.btn .ico { width: 1.15em; height: 1.15em; fill: currentColor; flex: none; }
+
+.btn-dark { background: var(--ink); color: var(--white); box-shadow: var(--shadow-s); }
+.btn-dark:hover { background: #16294a; }
+
+.btn-wa { background: var(--wa); color: #fff; box-shadow: 0 14px 30px -16px rgba(31, 168, 85, 0.9); }
+.btn-wa:hover { background: #178643; }
+
+.btn-full { width: 100%; }
+
+.pill-btn {
+  display: inline-flex; align-items: center; gap: 0.5em;
+  white-space: nowrap; flex: none;
+  font-size: 0.92rem; font-weight: 500; color: var(--sky);
+  border: 1.5px solid var(--sky); border-radius: 999px;
+  padding: 0.62em 1.25em;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.pill-btn .ico { width: 1.05em; height: 1.05em; }
+.pill-btn:hover { background: var(--sky); color: #fff; border-color: var(--sky); }
+
+/* ── Logo (cropped from the square logo PNG) ──────────────── */
+.logo { display: inline-flex; align-items: center; gap: 0.55rem; flex: none; }
+.logo-icon {
+  height: 2.1rem; aspect-ratio: 1.004; flex: none;
+  background: url("../assets/velaxa-logo.webp") no-repeat;
+  background-size: 267.9% 268.8%;
+  background-position: 50% 32.17%;
+}
+.logo-word {
+  height: 1.18rem; aspect-ratio: 5.823; flex: none;
+  background: url("../assets/velaxa-logo.webp") no-repeat;
+  background-size: 108.7% 632.9%;
+  background-position: 50% 75.93%;
+}
+
+/* ── Navbar ───────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 60;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+}
+.nav-inner { display: flex; align-items: center; gap: 1.5rem; padding-block: 1.1rem; }
+.nav-links { display: flex; gap: 2rem; margin-inline: auto; }
+.nav-links a {
+  font-size: 0.95rem; font-weight: 400; color: var(--ink-2);
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--sky); }
+.nav-toggle {
+  display: none; width: 2.6rem; height: 2.6rem; padding: 0;
+  background: none; border: 1.5px solid var(--line); border-radius: 10px;
+  cursor: pointer;
+}
+.nav-toggle span {
+  display: block; width: 1.05rem; height: 1.6px; margin: 0.24rem auto;
+  background: var(--ink); border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(0.44rem) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-0.44rem) rotate(-45deg); }
+
+/* ════════════════ HERO PANEL ════════════════ */
+.hero { padding-block: 0.5rem 0; }
+
+.panel {
+  position: relative;
+  /* Column flow: the label sits at the top, the card takes the space below and
+     centres itself there with auto margins — so the two can never collide,
+     however short the viewport gets. */
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 2.4rem 3rem 3rem;
+  border-radius: var(--r-xl);
+  overflow: hidden;
+  min-height: 90vh;
+  min-height: 90dvh;
+}
+
+/* The wash lives on a pseudo-element so its bottom edge can dissolve into the
+   page without fading the card and chips sitting on top of it. */
+.panel::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(34rem 26rem at 72% 38%, #d3ebf8 0%, transparent 70%),
+    linear-gradient(128deg, #f4fbfe 0%, #e9f6fc 46%, #dcf0fa 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 64%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 64%, transparent 100%);
+}
+
+/* Cut-out subject, scaled past the panel so he rises out of the bottom edge and
+   gets cropped there — the framing the reference uses. Sized by height only, so
+   the aspect ratio holds and any replacement cut-out lands the same way.
+   `top` anchors the head; overflow:hidden on .panel does the cropping. */
+/* <picture> must not become a flex item in the panel's column — the img inside
+   is absolutely positioned, so the wrapper should have no box of its own. */
+.panel picture { display: contents; }
+
+.panel-photo {
+  position: absolute; z-index: 1;
+  /* Half-body cut-out: it already ends at the waist, so it needs far less
+     scale than a full-length shot to read at the same head size. */
+  top: 7%; bottom: auto; left: 50%;
+  height: 118%; width: auto;
+  transform: translateX(-24%);
+  pointer-events: none;
+}
+
+/* White veil rising from the panel floor, so the subject dissolves upward
+   instead of ending on the hard crop line. Sits above the photo (z-index 1)
+   but below the card and chips (z-index 4). */
+.panel::after {
+  content: ""; position: absolute; inset: auto 0 0 0; z-index: 2;
+  height: 36%; pointer-events: none;
+  background: linear-gradient(to top,
+    #fff 0%,
+    rgba(255, 255, 255, 0.92) 26%,
+    rgba(255, 255, 255, 0.6) 55%,
+    transparent 100%);
+}
+
+/* margin-bottom is the guaranteed minimum gap; the card's auto margin adds
+   whatever slack is left over */
+.panel-label { position: relative; z-index: 3; margin: 0 0 2.5rem; }
+
+/* Booking card */
+.hero-card {
+  position: relative; z-index: 4;
+  margin: auto 0;
+  width: min(27rem, 46%);
+  background: rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(8px);
+  border-radius: var(--r-lg);
+  padding: 1.9rem 1.9rem;
+  box-shadow: var(--shadow-l);
+}
+.hero-card h1 { font-size: clamp(1.75rem, 2.2vw, 2.15rem); margin-bottom: 0.85rem; }
+
+.card-points { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 1.15rem; padding: 0; list-style: none; }
+.card-points li {
+  display: inline-flex; align-items: center; gap: 0.4em;
+  font-size: 0.73rem; font-weight: 500; color: var(--ink);
+  background: var(--sky-soft); border-radius: 999px;
+  padding: 0.34em 0.7em;
+}
+.card-points svg { width: 0.95em; height: 0.95em; fill: var(--sky); flex: none; }
+
+/* Short lead form inside the hero card — tighter than the full form below */
+.card-form-title {
+  font-size: 0.92rem; font-weight: 600; color: var(--ink);
+  margin: 0 0 0.6rem;
+}
+.hero-card .f { margin-bottom: 0.55rem; }
+.hero-card .f label { font-size: 0.73rem; margin-bottom: 0.18rem; }
+.hero-card .f input,
+.hero-card .f select { font-size: 0.86rem; padding: 0.52em 0.7em; }
+.hero-card .f-row { gap: 0.55rem; }
+.hero-card .f-phone { grid-template-columns: 7.4rem 1fr; gap: 0.4rem; }
+.hero-card .btn { font-size: 0.9rem; padding: 0.68em 1.2em; }
+.hero-card .f-status { font-size: 0.8rem; margin-top: 0.5rem; }
+.hero-card .f-status:empty { display: none; }
+
+/* "or" divider between the form and the WhatsApp shortcut */
+.card-or {
+  display: flex; align-items: center; gap: 0.7rem;
+  margin: 0.65rem 0; color: var(--ink-2); font-size: 0.76rem;
+}
+.card-or::before, .card-or::after {
+  content: ""; flex: 1; height: 1px; background: var(--line);
+}
+
+/* Floating stat cards. --px/--py are written by the pointer parallax in JS;
+   the long ease-out is what makes the drift feel like it has weight. */
+.chip-card {
+  position: absolute; z-index: 4;
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
+  transition: transform 0.55s cubic-bezier(0.22, 0.61, 0.36, 1);
+  will-change: transform;
+  display: flex; align-items: center; gap: 0.7rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border-radius: var(--r);
+  padding: 0.72rem 1rem;
+  box-shadow: var(--shadow-m);
+}
+.chip-card span:last-child { display: flex; flex-direction: column; line-height: 1.25; }
+.chip-card strong { color: var(--ink); font-weight: 600; font-size: 0.95rem; }
+.chip-card small { color: var(--ink-2); font-size: 0.78rem; }
+.chip-ico {
+  display: grid; place-items: center; flex: none;
+  width: 2.2rem; height: 2.2rem; border-radius: 10px;
+}
+.chip-ico svg { width: 1.15rem; height: 1.15rem; }
+.ico-amber { background: #fdf0dc; } .ico-amber svg { fill: #d08a1f; }
+.ico-mint  { background: #e4f4ee; } .ico-mint  svg { fill: #2f8f6b; }
+/* The wrapper is layout-neutral here so each chip keeps its own placement.
+   Positions assume a photo fills the right half — they sit over it. */
+.chips { display: contents; }
+.chip-1 { top: 38%; right: 11%; }
+.chip-2 { top: 56%; right: 18%; }
+
+/* ════════════════ CERTIFICATION MARQUEE ════════════════ */
+.marquee-band { padding-block: clamp(3rem, 5vw, 4.5rem) 0; }
+.strip-head { margin-bottom: 2rem; }
+.strip-head h2 { margin-bottom: 0; }
+
+/* Edges dissolve so logos enter and leave without a hard cut.
+   The vertical padding is headroom for the hover scale — overflow clips at the
+   padding edge, so without it a scaled-up badge gets its top and bottom shaved. */
+.marquee {
+  overflow: hidden;
+  padding-block: 0.85rem;
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0, #000 9%, #000 91%, transparent 100%);
+}
+.marquee-track {
+  display: flex; align-items: center;
+  gap: clamp(2.5rem, 5vw, 5rem);
+  width: max-content; margin: 0; padding: 0; list-style: none;
+  /* JS duplicates the list, so -50% lands exactly on the seam */
+  animation: marquee-scroll 34s linear infinite;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track { animation-play-state: paused; }
+.marquee-track li { flex: none; }
+/* Full colour: these are trust badges, so they have to be recognisable */
+.marquee-track img {
+  height: clamp(3.8rem, 5.5vw, 5.2rem); width: auto;
+  opacity: 0.92;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.marquee-track img:hover { opacity: 1; transform: scale(1.05); }
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .marquee { -webkit-mask-image: none; mask-image: none; }
+  .marquee-track { flex-wrap: wrap; width: auto; justify-content: center; }
+}
+
+/* ════════════════ PASTEL TILES ════════════════ */
+.tile-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem;
+}
+.tile {
+  position: relative;
+  border-radius: var(--r-lg);
+  padding: 1.8rem 1.6rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-m); }
+.tile h3 { font-size: 1.12rem; margin-bottom: 0.4em; }
+.tile p { font-size: 0.92rem; margin: 0; color: var(--ink-2); }
+.tile-blue  { background: var(--p-blue); }
+.tile-peach { background: var(--p-peach); }
+.tile-mint  { background: var(--p-mint); }
+.tile-lilac { background: var(--p-lilac); }
+
+.tile-step {
+  display: block; margin-bottom: 1.4rem;
+  font-size: 0.95rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--ink); opacity: 0.4;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ════════════════ BEFORE / AFTER ════════════════ */
+.ba-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-bottom: 1.4rem; }
+.ba-card { margin: 0; }
+.ba-card figcaption { margin-top: 0.75rem; font-size: 0.88rem; text-align: center; }
+.ba-card figcaption strong { color: var(--ink); font-weight: 600; }
+
+.ba-box {
+  position: relative; aspect-ratio: 4 / 3.3;
+  border-radius: var(--r-lg); overflow: hidden;
+  background: var(--white);
+  box-shadow: var(--shadow-s);
+  --pos: 50%;
+}
+.ba-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ba-before { clip-path: inset(0 calc(100% - var(--pos)) 0 0); }
+.ba-line {
+  position: absolute; top: 0; bottom: 0; left: var(--pos);
+  width: 2.5px; background: var(--white);
+  transform: translateX(-50%); z-index: 2; pointer-events: none;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.3);
+}
+.ba-knob {
+  position: absolute; top: 50%; left: 50%;
+  width: 2.3rem; height: 2.3rem; border-radius: 50%;
+  background: var(--white); transform: translate(-50%, -50%);
+  box-shadow: var(--shadow-m);
+}
+.ba-knob::before {
+  content: ""; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23203f69' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 8 6 12l4 4M14 8l4 4-4 4'/%3E%3C/svg%3E") center / 1.15rem no-repeat;
+}
+.ba-box input[type="range"] {
+  position: absolute; inset: 0; z-index: 3; margin: 0;
+  width: 100%; height: 100%; opacity: 0; cursor: ew-resize; touch-action: none;
+}
+.ba-tag {
+  position: absolute; bottom: 0.8rem; z-index: 2;
+  font-size: 0.7rem; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--white);
+  background: rgba(14, 26, 36, 0.7);
+  padding: 0.32em 0.75em; border-radius: 999px; pointer-events: none;
+}
+.tag-before { left: 0.8rem; }
+.tag-after { right: 0.8rem; background: rgba(6, 150, 210, 0.9); }
+
+/* The WhatsApp call-to-action that closes each section */
+.section-cta { text-align: center; margin-top: 2.6rem; }
+.section-cta .btn { max-width: 100%; }
+
+/* ════════════════ REVIEWS ════════════════ */
+.score-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 2.4rem; }
+.score {
+  display: flex; align-items: center; gap: 0.8rem;
+  background: var(--white); border: 1px solid var(--line);
+  border-radius: var(--r); padding: 0.8rem 1.3rem;
+  box-shadow: var(--shadow-s);
+}
+.score > svg { width: 1.8rem; height: 1.8rem; flex: none; }
+.g-mark path { fill: var(--navy); }
+.g-mark path:nth-child(2) { fill: var(--sky); }
+.g-mark path:nth-child(3) { fill: var(--gold); }
+.g-mark path:nth-child(4) { fill: #ea4335; }
+.tp-mark { fill: #00b67a; }
+.score span { display: flex; flex-direction: column; line-height: 1.3; }
+.score strong { color: var(--ink); font-weight: 600; }
+.score small { color: var(--ink-2); font-size: 0.8rem; }
+.stars { color: var(--gold); font-style: normal; letter-spacing: 0.05em; font-size: 0.9em; }
+
+/* Reviews ride the same marquee as the certification strip, just slower and
+   with cards instead of logos. */
+.marquee-quotes .marquee-track {
+  align-items: stretch;          /* equal-height cards, not vertically centred */
+  gap: 1.2rem;
+  animation-duration: 70s;
+}
+.marquee-quotes .marquee-track li { display: flex; width: 22rem; }
+.quote {
+  margin: 0; background: var(--white);
+  border: 1px solid var(--line); border-radius: var(--r-lg);
+  padding: 1.6rem 1.5rem;
+  display: flex; flex-direction: column;
+}
+.quote footer { margin-top: auto; }
+.quote p { font-size: 0.94rem; margin: 0.7em 0 1.2em; }
+.quote footer { display: flex; align-items: center; gap: 0.6rem; font-size: 0.9rem; color: var(--ink); }
+.quote footer small { color: var(--ink-2); font-size: 0.82rem; }
+.who {
+  display: grid; place-items: center; flex: none;
+  width: 2.1rem; height: 2.1rem; border-radius: 50%;
+  background: var(--sky-soft); color: var(--navy);
+  font-size: 0.72rem; font-weight: 600;
+}
+
+/* ════════════════ PACKAGES ════════════════ */
+.plan-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 27rem)); justify-content: center; gap: 1.5rem; }
+.plan {
+  position: relative; background: var(--white);
+  border: 1px solid var(--line); border-radius: var(--r-xl);
+  padding: 2.2rem 2rem 2rem;
+  /* column + auto margin keeps both cards' totals and buttons on one line,
+     even though the two plans list a different number of inclusions */
+  display: flex; flex-direction: column;
+}
+.plan h3 { font-size: 1.4rem; margin-bottom: 1.2rem; }
+.visit { border-top: 1px solid var(--line); padding-block: 1.1rem; }
+.visit-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; }
+.visit-top span { font-size: 0.8rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky); }
+.visit-top b { font-size: 1.45rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+.visit ul li { position: relative; padding-left: 1.4rem; font-size: 0.92rem; margin-bottom: 0.35rem; }
+.visit ul li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em;
+  width: 0.42rem; height: 0.42rem; border-radius: 50%; background: var(--sky-2);
+}
+.plan-total {
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--line); padding-block: 1.1rem;
+  margin: auto 0 1.1rem;
+}
+.plan-total span { font-size: 0.9rem; }
+.plan-total b { font-size: 1.9rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+/* ════════════════ BOOKING ════════════════ */
+.book-panel {
+  display: grid; grid-template-columns: 1fr 1.05fr;
+  gap: clamp(2rem, 4vw, 4rem); align-items: center;
+  background:
+    radial-gradient(30rem 22rem at 88% 90%, #d8eefa 0%, transparent 70%),
+    linear-gradient(128deg, #f4fbfe, #e9f6fc);
+  border-radius: var(--r-xl);
+  padding: clamp(2rem, 4vw, 3.4rem);
+}
+.book-copy h2 { margin-bottom: 1.2rem; }
+.check-list li { position: relative; padding-left: 1.9rem; margin-bottom: 0.6rem; }
+.check-list li::before {
+  content: ""; position: absolute; left: 0; top: 0.3em;
+  width: 1.25rem; height: 1.25rem; border-radius: 50%;
+  background: var(--sky) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='m9.5 16.5-4-4 1.4-1.4 2.6 2.6 7.1-7.1L18 8Z' fill='white'/%3E%3C/svg%3E") center / 0.9rem no-repeat;
+}
+.book-fine { font-size: 0.85rem; margin: 1.6rem 0 0; }
+
+.book-form {
+  background: var(--white); border-radius: var(--r-lg);
+  padding: 2rem 1.9rem; box-shadow: var(--shadow-l);
+}
+.f { margin-bottom: 1rem; }
+.f label { display: block; font-size: 0.82rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
+.f .opt { font-weight: 400; color: var(--ink-2); }
+.f input, .f select {
+  width: 100%; font: inherit; font-size: 0.95rem; color: var(--ink);
+  background: var(--tint); border: 1.5px solid var(--line);
+  border-radius: var(--r-sm); padding: 0.7em 0.9em;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.f input:focus, .f select:focus {
+  outline: none; border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(6, 150, 210, 0.16);
+}
+.f input.bad, .f select.bad { border-color: var(--coral); }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+.f-phone { display: grid; grid-template-columns: 7.2rem 1fr; gap: 0.5rem; }
+.f-status { text-align: center; font-size: 0.9rem; font-weight: 500; margin: 0.8rem 0 0; min-height: 1.4em; }
+.f-status.ok { color: #178643; }
+.f-status.err { color: var(--coral); }
+.state-f.hidden { visibility: hidden; }
+
+/* ════════════════ FOOTER ════════════════ */
+.footer { padding-block: 0 2.5rem; }
+
+.foot-base { text-align: center; border-top: 1px solid var(--line);
+  padding-top: 2.6rem; font-size: 0.9rem; }
+.foot-base .logo { justify-content: center; margin-bottom: 0.9rem; }
+.foot-base p { margin: 0.3rem 0 0; }
+.fine { font-size: 0.78rem; opacity: 0.75; }
+
+/* ── Floating WhatsApp ────────────────────────────────────── */
+.wa-float {
+  position: fixed; right: 1.3rem; bottom: 1.3rem; z-index: 70;
+  display: grid; place-items: center;
+  width: 3.4rem; height: 3.4rem; border-radius: 50%;
+  background: var(--wa);
+  box-shadow: 0 12px 28px -8px rgba(31, 168, 85, 0.75);
+  transition: transform 0.25s ease;
+}
+.wa-float:hover { transform: scale(1.08); }
+.wa-float svg { width: 1.8rem; height: 1.8rem; fill: #fff; }
+
+/* ── Reveal on scroll ─────────────────────────────────────── */
+.rv { opacity: 0; transform: translateY(22px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .rv { opacity: 1; transform: none; transition: none; }
+  .chip-card { transform: none; transition: none; will-change: auto; }
+  html { scroll-behavior: auto; }
+  .btn:hover, .tile:hover { transform: none; }
+}
+
+/* ════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════════════════════════ */
+/* The nav collapses on its own schedule: logo + five links + CTA stop fitting
+   comfortably around 1000px, well before the layout breakpoints below. */
+@media (max-width: 1000px) {
+  .nav-links {
+    position: absolute; left: 1.25rem; right: 1.25rem; top: calc(100% + 0.4rem);
+    flex-direction: column; gap: 0; margin: 0;
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: var(--r); padding: 0.5rem;
+    box-shadow: var(--shadow-l);
+    display: none;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 0.75rem 0.9rem; border-radius: 10px; }
+  .nav-links a:hover { background: var(--tint); }
+  .nav-inner { position: relative; justify-content: space-between; }
+  .nav-toggle { display: block; order: 3; }
+  .nav-cta { display: none; }
+
+}
+
+@media (max-width: 1100px) {
+  .tile-grid { grid-template-columns: repeat(2, 1fr); }
+  .panel { padding: 2.2rem 2rem 2.5rem; }
+  .hero-card { width: min(24rem, 52%); padding: 1.7rem 1.6rem; }
+  .chip-1 { right: 3%; } .chip-2 { right: 8%; }
+}
+
+@media (max-width: 860px) {
+  /* Hero stacks: label → card → photo, chips ride the photo band */
+  /* Stacked layout: the cut-out and the floating chips have nowhere useful to
+     sit once the card goes full width, so the hero is the booking card alone. */
+  .panel { display: block; min-height: 0; padding: 1.6rem 1.4rem; border-radius: var(--r-lg); }
+  .panel-label { margin-bottom: 1.2rem; }
+  .hero-card {
+    width: 100%; margin: 0;
+    padding: 1.8rem 1.6rem; box-shadow: var(--shadow-m);
+  }
+  .panel-photo, .chips { display: none; }
+
+  .ba-grid { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; }
+  .ba-grid { margin-bottom: 1.4rem; }
+  .plan-grid { grid-template-columns: minmax(0, 27rem); }
+  .book-panel { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .tile-grid { grid-template-columns: 1fr; }
+  .marquee-quotes .marquee-track li { width: 18rem; }
+  .f-row { grid-template-columns: 1fr; }
+  .state-f.hidden { display: none; }
+  .book-form { padding: 1.5rem 1.3rem; }
+}
