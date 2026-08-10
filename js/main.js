@@ -12,14 +12,49 @@ const WHATSAPP_MESSAGE = "Hi Velaxa! I'd like a free consultation for dental imp
 const SHEET_ENDPOINT = "";
 
 /* ── Data ─────────────────────────────────────────────────── */
+/* One row per country: the residence dropdown, the dialling-code dropdown and
+   the number-length check all read from here, so adding a country is a
+   one-line change and the three can never drift apart.
+   `len` is how many digits a national number has (trunk zero excluded). */
 const COUNTRIES = [
-  "United States", "Canada", "United Kingdom", "Australia", "Ireland",
-  "Germany", "France", "Netherlands", "Belgium", "Switzerland", "Austria",
-  "Sweden", "Norway", "Denmark", "Finland", "Italy", "Spain", "Portugal",
-  "Greece", "Poland", "Romania", "New Zealand", "United Arab Emirates",
-  "Saudi Arabia", "Qatar", "Kuwait", "Mexico", "Brazil", "South Africa",
-  "Japan", "Other",
+  { name: "United States",        flag: "\u{1F1FA}\u{1F1F8}", dial: "+1",   len: [10] },
+  { name: "Canada",               flag: "\u{1F1E8}\u{1F1E6}", dial: "+1",   len: [10] },
+  { name: "United Kingdom",       flag: "\u{1F1EC}\u{1F1E7}", dial: "+44",  len: [9, 10] },
+  { name: "Australia",            flag: "\u{1F1E6}\u{1F1FA}", dial: "+61",  len: [9] },
+  { name: "Ireland",              flag: "\u{1F1EE}\u{1F1EA}", dial: "+353", len: [7, 8, 9] },
+  { name: "Germany",              flag: "\u{1F1E9}\u{1F1EA}", dial: "+49",  len: [6, 7, 8, 9, 10, 11] },
+  { name: "France",               flag: "\u{1F1EB}\u{1F1F7}", dial: "+33",  len: [9] },
+  { name: "Netherlands",          flag: "\u{1F1F3}\u{1F1F1}", dial: "+31",  len: [9] },
+  { name: "Belgium",              flag: "\u{1F1E7}\u{1F1EA}", dial: "+32",  len: [8, 9] },
+  { name: "Switzerland",          flag: "\u{1F1E8}\u{1F1ED}", dial: "+41",  len: [9] },
+  { name: "Austria",              flag: "\u{1F1E6}\u{1F1F9}", dial: "+43",  len: [7, 8, 9, 10, 11, 12, 13] },
+  { name: "Sweden",               flag: "\u{1F1F8}\u{1F1EA}", dial: "+46",  len: [7, 8, 9] },
+  { name: "Norway",               flag: "\u{1F1F3}\u{1F1F4}", dial: "+47",  len: [8] },
+  { name: "Denmark",              flag: "\u{1F1E9}\u{1F1F0}", dial: "+45",  len: [8] },
+  { name: "Finland",              flag: "\u{1F1EB}\u{1F1EE}", dial: "+358", len: [6, 7, 8, 9, 10, 11, 12] },
+  { name: "Italy",                flag: "\u{1F1EE}\u{1F1F9}", dial: "+39",  len: [6, 7, 8, 9, 10, 11] },
+  { name: "Spain",                flag: "\u{1F1EA}\u{1F1F8}", dial: "+34",  len: [9] },
+  { name: "Portugal",             flag: "\u{1F1F5}\u{1F1F9}", dial: "+351", len: [9] },
+  { name: "Greece",               flag: "\u{1F1EC}\u{1F1F7}", dial: "+30",  len: [10] },
+  { name: "Poland",               flag: "\u{1F1F5}\u{1F1F1}", dial: "+48",  len: [9] },
+  { name: "Romania",              flag: "\u{1F1F7}\u{1F1F4}", dial: "+40",  len: [9] },
+  { name: "T\u00FCrkiye",          flag: "\u{1F1F9}\u{1F1F7}", dial: "+90",  len: [10] },
+  { name: "New Zealand",          flag: "\u{1F1F3}\u{1F1FF}", dial: "+64",  len: [8, 9, 10] },
+  { name: "United Arab Emirates", flag: "\u{1F1E6}\u{1F1EA}", dial: "+971", len: [9] },
+  { name: "Saudi Arabia",         flag: "\u{1F1F8}\u{1F1E6}", dial: "+966", len: [9] },
+  { name: "Qatar",                flag: "\u{1F1F6}\u{1F1E6}", dial: "+974", len: [8] },
+  { name: "Kuwait",               flag: "\u{1F1F0}\u{1F1FC}", dial: "+965", len: [8] },
+  { name: "Mexico",               flag: "\u{1F1F2}\u{1F1FD}", dial: "+52",  len: [10] },
+  { name: "Brazil",               flag: "\u{1F1E7}\u{1F1F7}", dial: "+55",  len: [10, 11] },
+  { name: "South Africa",         flag: "\u{1F1FF}\u{1F1E6}", dial: "+27",  len: [9] },
+  { name: "Japan",                flag: "\u{1F1EF}\u{1F1F5}", dial: "+81",  len: [10] },
+  { name: "Other",                flag: "",                 dial: "",     len: null },
 ];
+
+/* Lengths keyed by dialling code, derived so the two can never disagree */
+const PHONE_LENGTHS = Object.fromEntries(
+  COUNTRIES.filter((c) => c.dial).map((c) => [c.dial, c.len])
+);
 
 const US_STATES = [
   "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
@@ -33,38 +68,13 @@ const US_STATES = [
   "Washington", "Washington D.C.", "West Virginia", "Wisconsin", "Wyoming",
 ];
 
-/* USA first, per the brief */
-const PHONE_CODES = [
-  ["+1", "🇺🇸 USA"], ["+1", "🇨🇦 Canada"], ["+44", "🇬🇧 UK"],
-  ["+61", "🇦🇺 Australia"], ["+353", "🇮🇪 Ireland"], ["+49", "🇩🇪 Germany"],
-  ["+33", "🇫🇷 France"], ["+31", "🇳🇱 Netherlands"], ["+32", "🇧🇪 Belgium"],
-  ["+41", "🇨🇭 Switzerland"], ["+43", "🇦🇹 Austria"], ["+46", "🇸🇪 Sweden"],
-  ["+47", "🇳🇴 Norway"], ["+45", "🇩🇰 Denmark"], ["+358", "🇫🇮 Finland"],
-  ["+39", "🇮🇹 Italy"], ["+34", "🇪🇸 Spain"], ["+351", "🇵🇹 Portugal"],
-  ["+30", "🇬🇷 Greece"], ["+48", "🇵🇱 Poland"], ["+40", "🇷🇴 Romania"],
-  ["+64", "🇳🇿 New Zealand"], ["+971", "🇦🇪 UAE"], ["+966", "🇸🇦 Saudi Arabia"],
-  ["+974", "🇶🇦 Qatar"], ["+965", "🇰🇼 Kuwait"], ["+52", "🇲🇽 Mexico"],
-  ["+55", "🇧🇷 Brazil"], ["+27", "🇿🇦 South Africa"], ["+81", "🇯🇵 Japan"],
-];
-
 const REFERENCES = [
   "Google search", "Facebook / Instagram", "YouTube", "TikTok",
   "Friend or family", "Other",
 ];
 
-/* How many digits a national number has, per dialling code. Enough to reject a
-   number that is too short or too long before it ever reaches the sales team,
-   without pulling in a full phone-metadata library. */
-const PHONE_LENGTHS = {
-  "+1": [10], "+44": [9, 10], "+61": [9], "+353": [7, 8, 9], "+49": [6, 7, 8, 9, 10, 11],
-  "+33": [9], "+31": [9], "+32": [8, 9], "+41": [9], "+43": [7, 8, 9, 10, 11, 12, 13],
-  "+46": [7, 8, 9], "+47": [8], "+45": [8], "+358": [6, 7, 8, 9, 10, 11, 12],
-  "+39": [6, 7, 8, 9, 10, 11], "+34": [9], "+351": [9], "+30": [10], "+48": [9],
-  "+40": [9], "+64": [8, 9, 10], "+971": [9], "+966": [9], "+974": [8], "+965": [8],
-  "+52": [10], "+55": [10, 11], "+27": [9], "+81": [10],
-};
 
-/* Reads "+1 🇺🇸 USA" back to "+1" */
+/* Reads "+1 United States" back to "+1" */
 const dialOf = (value) => (value || "").split(" ")[0];
 
 /**
@@ -223,19 +233,13 @@ function initLeadForm(form) {
   const submit = form.querySelector("button[type=submit]");
   const submitLabel = submit.textContent;
 
-  COUNTRIES.forEach((c) => country.add(new Option(c, c)));
+  COUNTRIES.forEach((c) => country.add(new Option(c.name, c.name)));
   US_STATES.forEach((s) => state.add(new Option(s, s)));
-  PHONE_CODES.forEach(([c, label]) => code.add(new Option(`${label} ${c}`, `${c} ${label}`)));
+  COUNTRIES.filter((c) => c.dial).forEach((c) =>
+    code.add(new Option(`${c.flag} ${c.dial}`, `${c.dial} ${c.name}`))
+  );
   /* The short hero form omits Reference; the full form below has it */
   if (ref) REFERENCES.forEach((r) => ref.add(new Option(r, r)));
-
-  /* The state dropdown only applies to US residents */
-  country.addEventListener("change", () => {
-    const isUS = country.value === "United States";
-    stateField.classList.toggle("hidden", !isUS);
-    state.required = isUS;
-    if (!isUS) state.value = "";
-  });
 
   /* ── WhatsApp number: reject a wrong digit count before it is submitted ── */
   const phone = form.querySelector('input[type="tel"]');
@@ -262,6 +266,24 @@ function initLeadForm(form) {
   code.addEventListener("change", () => { if (phone.value.trim()) checkPhone(); });
   /* Clear the complaint while they are fixing it, don't nag mid-typing */
   phone.addEventListener("input", () => showPhoneError(""));
+
+  country.addEventListener("change", () => {
+    /* The state dropdown only applies to US residents */
+    const isUS = country.value === "United States";
+    stateField.classList.toggle("hidden", !isUS);
+    state.required = isUS;
+    if (!isUS) state.value = "";
+
+    /* Follow the country they just picked with the matching dialling code, so
+       the number check applies the rules for where they actually live. They can
+       still override it afterwards if their number is from somewhere else. */
+    const picked = COUNTRIES.find((c) => c.name === country.value);
+    if (picked && picked.dial) {
+      code.value = `${picked.dial} ${picked.name}`;
+      if (phone.value.trim()) checkPhone();
+    }
+  });
+
 
   form.addEventListener("input", (e) => e.target.classList.remove("bad"));
 
