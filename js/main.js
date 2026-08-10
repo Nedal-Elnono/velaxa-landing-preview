@@ -254,15 +254,56 @@ document.querySelectorAll("[data-gallery]").forEach((gallery) => {
     if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
   });
 
-  /* Swipe, with a threshold so a scroll gesture is not read as a flick */
-  let startX = null;
-  gallery.addEventListener("pointerdown", (e) => { startX = e.clientX; }, { passive: true });
-  gallery.addEventListener("pointerup", (e) => {
-    if (startX === null) return;
+  /* ── Drag / swipe ──
+     The track follows the pointer live, then snaps on release. Pointer capture
+     is what makes it reliable: without it the browser hands the gesture to its
+     own image-drag or scroll handling and we never see the pointerup. */
+  let startX = 0, startY = 0, dragging = false;
+
+  const setOffset = (px) => {
+    track.style.transform = `translateX(calc(${-index * 100}% + ${px}px))`;
+  };
+
+  gallery.addEventListener("pointerdown", (e) => {
+    if (e.button !== 0 || e.target.closest("button")) return;
+    startX = e.clientX;
+    startY = e.clientY;
+    dragging = true;
+    track.style.transition = "none";
+    gallery.setPointerCapture(e.pointerId);
+  });
+
+  gallery.addEventListener("pointermove", (e) => {
+    if (!dragging) return;
     const dx = e.clientX - startX;
-    if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
-    startX = null;
-  }, { passive: true });
+    /* a clearly vertical gesture is a page scroll, not a swipe — let it go */
+    if (Math.abs(e.clientY - startY) > Math.abs(dx) + 10) {
+      dragging = false;
+      track.style.transition = "";
+      go(index);
+      return;
+    }
+    setOffset(dx);
+  });
+
+  const endDrag = (e) => {
+    if (!dragging) return;
+    dragging = false;
+    track.style.transition = "";
+    const dx = e.clientX - startX;
+    /* a tenth of the card, or 40px, whichever is smaller */
+    const threshold = Math.min(40, gallery.offsetWidth * 0.1);
+    if (Math.abs(dx) > threshold) go(index + (dx < 0 ? 1 : -1));
+    else go(index);
+  };
+
+  gallery.addEventListener("pointerup", endDrag);
+  gallery.addEventListener("pointercancel", () => {
+    if (!dragging) return;
+    dragging = false;
+    track.style.transition = "";
+    go(index);
+  });
 
   go(0);
 });

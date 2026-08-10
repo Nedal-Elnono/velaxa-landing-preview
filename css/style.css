@@ -516,12 +516,19 @@ a { color: inherit; text-decoration: none; }
 /* Two illustrations per package, flipped with the arrows. Every render was
    normalised to the same subject height, so the arch stays the same size on
    every slide and in both cards. */
-.plan-gallery { position: relative; overflow: hidden; margin-bottom: 1.2rem; }
+.plan-gallery {
+  position: relative; overflow: hidden; margin-bottom: 1.2rem;
+  touch-action: pan-y;      /* keep vertical scrolling, claim horizontal drags */
+  cursor: grab;
+}
+.plan-gallery:active { cursor: grabbing; }
 .plan-track { display: flex; transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
 .plan-figure {
   flex: 0 0 100%;
   display: block; width: 100%; height: 15rem;
   object-fit: contain;
+  /* the browser's native image drag would swallow the gesture */
+  pointer-events: none; user-select: none; -webkit-user-drag: none;
 }
 
 .gal-btn {
