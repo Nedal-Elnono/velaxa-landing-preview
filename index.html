@@ -53,24 +53,16 @@
   <div class="shell">
     <div class="panel">
 
-      <!-- Cut-out patient shot. Swap the file and it keeps its place: the CSS
-           anchors it by height, not by the image's own framing. -->
-      <picture>
-        <!-- Hidden below 860px, so hand narrow screens a 1px placeholder rather
-             than a hero image they will never see. -->
-        <source media="(max-width: 860px)"
-                srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
-        <source srcset="assets/hero-patient.webp 1x, assets/hero-patient@2x.webp 2x" />
-        <img class="panel-photo" src="assets/hero-patient.webp"
-             width="900" height="934" decoding="async" fetchpriority="high"
-             alt="Velaxa patient smiling after dental implant treatment" />
-      </picture>
+      <div class="hero-copy">
+        <p class="hero-badge">German &amp; Swiss Implant Systems</p>
 
-      <p class="rule-label panel-label">Istanbul, Türkiye</p>
-
-      <!-- Booking card -->
-      <div class="hero-card">
         <h1>Dental Implants<br /><span class="accent">in Turkey</span></h1>
+
+        <p class="hero-lede">
+          Regain your confidence with permanent dental implants that look and feel like
+          natural teeth &mdash; fitted by an experienced team, at one all-inclusive price,
+          and backed by a 15-year written warranty.
+        </p>
 
         <ul class="card-points" role="list">
           <li>
@@ -83,70 +75,62 @@
           </li>
           <li>
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 1 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 15.9l-6.1 3.5 1.5-6.8L2.2 8l6.9-.7L12 1Z"/></svg>
-            German and Swiss implants
+            Free Consultation
           </li>
         </ul>
 
-        <!-- Short lead form, per the brief. The Reference field lives on the
-             full form further down the page to keep this one short. -->
-        <form class="card-form lead-form" novalidate>
-          <p class="card-form-title">Book Your Consultation Now</p>
+        <div class="hero-cta">
+          <a href="#" class="btn btn-wa" data-whatsapp>
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
+            Chat on WhatsApp Now
+          </a>
+          <a href="#book" class="btn btn-quote">Get Your Quote</a>
+        </div>
 
-          <div class="f">
-            <label for="h-name">Full name</label>
-            <input type="text" id="h-name" name="fullName" placeholder="John Carter" autocomplete="name" required />
-          </div>
+        <p class="hero-rating">
+          <span class="stars" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+          <strong>4.8 / 5</strong> on Google &middot; 400+ patients
+        </p>
+      </div>
 
-          <div class="f-row">
-            <div class="f">
-              <label for="h-country">Country residence</label>
-              <select id="h-country" name="country" data-country required>
-                <option value="" selected disabled>Select</option>
-              </select>
-            </div>
-            <div class="f state-f">
-              <label for="h-state">State</label>
-              <select id="h-state" name="state" data-state>
-                <option value="" selected disabled>Select</option>
-              </select>
-            </div>
-          </div>
+      <!-- Collage: the transformation on the left, a real patient on the right -->
+      <div class="hero-collage">
+        <figure class="col-shot col-before">
+          <img src="assets/cases/case2-before.webp" width="1120" height="924"
+               decoding="async" fetchpriority="high"
+               alt="A patient's teeth before implant treatment" />
+          <figcaption>Before</figcaption>
+        </figure>
+        <figure class="col-shot col-after">
+          <img src="assets/cases/case2-after.webp" width="1120" height="924"
+               decoding="async" fetchpriority="high"
+               alt="The same patient's teeth after implant treatment" />
+          <figcaption>After</figcaption>
+        </figure>
 
-          <div class="f">
-            <label for="h-phone">WhatsApp number</label>
-            <div class="f-phone">
-              <select id="h-code" name="countryCode" data-code aria-label="Country code"></select>
-              <input type="tel" id="h-phone" name="whatsapp" placeholder="(415) 555-0123" autocomplete="tel" required />
-            </div>
-          </div>
+        <div class="col-portrait">
+          <img src="assets/hero-patient.webp"
+               srcset="assets/hero-patient.webp 1x, assets/hero-patient@2x.webp 2x"
+               width="900" height="934" decoding="async" fetchpriority="high"
+               alt="Velaxa patient smiling after dental implant treatment" />
+        </div>
 
-          <button type="submit" class="btn btn-dark btn-full">Book Your Consultation Now</button>
-          <p class="f-status" role="status" aria-live="polite"></p>
-        </form>
+        <div class="chip-card col-chip">
+          <span class="chip-ico ico-amber" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.5-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4-6.1 6.1Z"/></svg>
+          </span>
+          <span><strong>15 Years</strong><small>Warranty</small></span>
+        </div>
 
-        <div class="card-or"><span>or</span></div>
-
-        <a href="#" class="btn btn-wa btn-full" data-whatsapp>
-          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
-          Contact Us Now
+        <a class="col-offer" href="#book">
+          <span>
+            <small>Free of charge</small>
+            <strong>Book your consultation</strong>
+          </span>
+          <span class="col-offer-go" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </a>
-      </div>
-
-      <!-- floating stat cards — wrapper only matters on mobile, where it becomes a row -->
-      <div class="chips">
-      <div class="chip-card chip-1">
-        <span class="chip-ico ico-amber" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.5-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4-6.1 6.1Z"/></svg>
-        </span>
-        <span><strong>15 Years</strong><small>Warranty</small></span>
-      </div>
-
-      <div class="chip-card chip-2">
-        <span class="chip-ico ico-mint" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 0 0-2.4.8A4 4 0 0 0 4 7c0 3.3 1 5.4 1.6 8.6.4 2.3.6 4.4 1.8 5.1 1.5.9 2.3-1 2.6-3 .3-1.8.4-3.7 2-3.7s1.7 1.9 2 3.7c.3 2 1.1 3.9 2.6 3 1.2-.7 1.4-2.8 1.8-5.1C19 12.4 20 10.3 20 7a4 4 0 0 0-5.6-4.2A4 4 0 0 0 12 2Z"/></svg>
-        </span>
-        <span><strong>Velaxa</strong><small>Istanbul, Türkiye</small></span>
-      </div>
       </div>
 
     </div>

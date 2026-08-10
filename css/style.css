@@ -185,117 +185,142 @@ a { color: inherit; text-decoration: none; }
 .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
 .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-0.44rem) rotate(-45deg); }
 
-/* ════════════════ HERO PANEL ════════════════ */
+/* ════════════════ HERO ════════════════ */
 .hero { padding-block: 0.5rem 0; }
 
 .panel {
   position: relative;
-  /* Column flow: the label sits at the top, the card takes the space below and
-     centres itself there with auto margins — so the two can never collide,
-     however short the viewport gets. */
-  display: flex; flex-direction: column; align-items: flex-start;
-  padding: 2.4rem 3rem 3rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.8rem, 3.5vw, 3.2rem);
+  align-items: center;
+  padding: clamp(2rem, 3.5vw, 3.2rem);
   border-radius: var(--r-xl);
   overflow: hidden;
-  min-height: 90vh;
-  min-height: 90dvh;
+  min-height: 34rem;
 }
 
-/* The wash lives on a pseudo-element so its bottom edge can dissolve into the
-   page without fading the card and chips sitting on top of it. */
+/* The wash sits on a pseudo-element so its bottom edge can dissolve into the
+   page without fading the content on top of it. */
 .panel::before {
   content: ""; position: absolute; inset: 0; z-index: 0;
   border-radius: inherit;
   background:
-    radial-gradient(34rem 26rem at 72% 38%, #d3ebf8 0%, transparent 70%),
+    radial-gradient(32rem 24rem at 78% 30%, #d3ebf8 0%, transparent 70%),
     linear-gradient(128deg, #f4fbfe 0%, #e9f6fc 46%, #dcf0fa 100%);
-  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 64%, transparent 100%);
-  mask-image: linear-gradient(to bottom, #000 0%, #000 64%, transparent 100%);
 }
 
-/* Cut-out subject, scaled past the panel so he rises out of the bottom edge and
-   gets cropped there — the framing the reference uses. Sized by height only, so
-   the aspect ratio holds and any replacement cut-out lands the same way.
-   `top` anchors the head; overflow:hidden on .panel does the cropping. */
-/* <picture> must not become a flex item in the panel's column — the img inside
-   is absolutely positioned, so the wrapper should have no box of its own. */
-.panel picture { display: contents; }
+/* ── Left column ── */
+.hero-copy { position: relative; z-index: 2; }
 
-.panel-photo {
-  position: absolute; z-index: 1;
-  /* Half-body cut-out: it already ends at the waist, so it needs far less
-     scale than a full-length shot to read at the same head size. */
-  top: 7%; bottom: auto; left: 50%;
-  height: 118%; width: auto;
-  transform: translateX(-24%);
-  pointer-events: none;
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 0.55em;
+  font-size: 0.78rem; font-weight: 600; letter-spacing: 0.02em;
+  color: var(--sky);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 999px; padding: 0.45em 1em;
+  margin: 0 0 1.3rem;
+}
+.hero-badge::before {
+  content: ""; width: 0.45em; height: 0.45em;
+  border-radius: 50%; background: currentColor;
 }
 
-/* White veil rising from the panel floor, so the subject dissolves upward
-   instead of ending on the hard crop line. Sits above the photo (z-index 1)
-   but below the card and chips (z-index 4). */
-.panel::after {
-  content: ""; position: absolute; inset: auto 0 0 0; z-index: 2;
-  height: 36%; pointer-events: none;
-  background: linear-gradient(to top,
-    #fff 0%,
-    rgba(255, 255, 255, 0.92) 26%,
-    rgba(255, 255, 255, 0.6) 55%,
-    transparent 100%);
+.hero-copy h1 {
+  font-size: clamp(2.5rem, 4.6vw, 4rem);
+  line-height: 1.04;
+  margin-bottom: 0.5em;
+}
+.hero-lede {
+  font-size: 1.02rem; max-width: 32em;
+  margin-bottom: 1.5rem;
 }
 
-/* margin-bottom is the guaranteed minimum gap; the card's auto margin adds
-   whatever slack is left over */
-.panel-label { position: relative; z-index: 3; margin: 0 0 2.5rem; }
-
-/* Booking card */
-.hero-card {
-  position: relative; z-index: 4;
-  margin: auto 0;
-  width: min(27rem, 46%);
-  background: rgba(255, 255, 255, 0.93);
-  backdrop-filter: blur(8px);
-  border-radius: var(--r-lg);
-  padding: 1.9rem 1.9rem;
-  box-shadow: var(--shadow-l);
-}
-.hero-card h1 { font-size: clamp(1.75rem, 2.2vw, 2.15rem); margin-bottom: 0.85rem; }
-
-.card-points { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0 0 1.15rem; padding: 0; list-style: none; }
+.card-points { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0 0 1.5rem; padding: 0; list-style: none; }
 .card-points li {
-  display: inline-flex; align-items: center; gap: 0.4em;
-  font-size: 0.73rem; font-weight: 500; color: var(--ink);
-  background: var(--sky-soft); border-radius: 999px;
-  padding: 0.34em 0.7em;
+  display: inline-flex; align-items: center; gap: 0.42em;
+  font-size: 0.78rem; font-weight: 600; color: var(--ink);
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.95);
+  border-radius: 999px; padding: 0.4em 0.85em;
 }
 .card-points svg { width: 0.95em; height: 0.95em; fill: var(--sky); flex: none; }
 
-/* Short lead form inside the hero card — tighter than the full form below */
-.card-form-title {
-  font-size: 0.92rem; font-weight: 600; color: var(--ink);
-  margin: 0 0 0.6rem;
+.hero-cta { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-bottom: 1.3rem; }
+.btn-quote {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--ink); border-color: var(--line);
 }
-.hero-card .f { margin-bottom: 0.55rem; }
-.hero-card .f label { font-size: 0.73rem; margin-bottom: 0.18rem; }
-.hero-card .f input,
-.hero-card .f select { font-size: 0.86rem; padding: 0.52em 0.7em; }
-.hero-card .f-row { gap: 0.55rem; }
-.hero-card .f-phone { grid-template-columns: 7.4rem 1fr; gap: 0.4rem; }
-.hero-card .btn { font-size: 0.9rem; padding: 0.68em 1.2em; }
-.hero-card .f-status { font-size: 0.8rem; margin-top: 0.5rem; }
-.hero-card .f-status:empty { display: none; }
+.btn-quote:hover { background: var(--white); border-color: var(--sky); color: var(--sky); }
 
-/* "or" divider between the form and the WhatsApp shortcut */
-.card-or {
-  display: flex; align-items: center; gap: 0.7rem;
-  margin: 0.65rem 0; color: var(--ink-2); font-size: 0.76rem;
+.hero-rating { display: flex; align-items: center; flex-wrap: wrap; gap: 0.15rem 0.5rem; font-size: 0.9rem; margin: 0; }
+.hero-rating strong { color: var(--ink); font-weight: 600; white-space: nowrap; }
+
+/* ── Right column: the transformation, then the person ── */
+.hero-collage {
+  position: relative; z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1.04fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.7rem;
+  aspect-ratio: 1 / 0.94;
 }
-.card-or::before, .card-or::after {
-  content: ""; flex: 1; height: 1px; background: var(--line);
+.col-shot {
+  position: relative; margin: 0;
+  border-radius: var(--r); overflow: hidden;
+  box-shadow: var(--shadow-s);
+}
+.col-shot img { width: 100%; height: 100%; object-fit: cover; }
+.col-shot figcaption {
+  position: absolute; left: 0.6rem; bottom: 0.6rem;
+  font-size: 0.66rem; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--white);
+  background: rgba(14, 26, 36, 0.66);
+  padding: 0.28em 0.7em; border-radius: 999px;
+}
+.col-after figcaption { background: rgba(7, 151, 214, 0.9); }
+.col-before { grid-area: 1 / 1 / 2 / 2; }
+.col-after { grid-area: 2 / 1 / 3 / 2; }
+
+.col-portrait {
+  grid-area: 1 / 2 / 3 / 3;
+  border-radius: var(--r);
+  overflow: hidden;
+  background: linear-gradient(165deg, #e2f2fb, #c2e3f6);
+  box-shadow: var(--shadow-s);
+}
+.col-portrait img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: 50% 12%;
 }
 
-/* Floating stat cards. --px/--py are written by the pointer parallax in JS;
-   the long ease-out is what makes the drift feel like it has weight. */
+/* Floating badge straddling the before/after seam, as on the reference */
+.col-chip { top: 46%; left: -1.1rem; }
+
+.col-offer {
+  position: absolute; z-index: 3;
+  left: 52%; right: 0.7rem; bottom: 0.7rem;
+  display: flex; align-items: center; justify-content: space-between; gap: 0.8rem;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(8px);
+  border-radius: var(--r);
+  padding: 0.7rem 0.8rem;
+  box-shadow: var(--shadow-m);
+  transition: transform 0.2s ease;
+}
+.col-offer:hover { transform: translateY(-2px); }
+.col-offer span:first-child { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.col-offer small { font-size: 0.7rem; color: var(--sky); font-weight: 600; }
+.col-offer strong { font-size: 0.86rem; color: var(--ink); font-weight: 600; }
+.col-offer-go {
+  display: grid; place-items: center; flex: none;
+  width: 2rem; height: 2rem; border-radius: 50%;
+  background: var(--ink); color: var(--white);
+}
+.col-offer-go svg { width: 1rem; height: 1rem; }
+
+/* Floating stat cards (shared with the collage badge) */
 .chip-card {
   position: absolute; z-index: 4;
   transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
@@ -303,26 +328,21 @@ a { color: inherit; text-decoration: none; }
   will-change: transform;
   display: flex; align-items: center; gap: 0.7rem;
   background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.95);
   border-radius: var(--r);
-  padding: 0.72rem 1rem;
+  padding: 0.7rem 1rem;
   box-shadow: var(--shadow-m);
 }
 .chip-card span:last-child { display: flex; flex-direction: column; line-height: 1.25; }
-.chip-card strong { color: var(--ink); font-weight: 600; font-size: 0.95rem; }
-.chip-card small { color: var(--ink-2); font-size: 0.78rem; }
+.chip-card strong { color: var(--ink); font-weight: 600; font-size: 0.92rem; }
+.chip-card small { color: var(--ink-2); font-size: 0.75rem; }
 .chip-ico {
   display: grid; place-items: center; flex: none;
-  width: 2.2rem; height: 2.2rem; border-radius: 10px;
+  width: 2.1rem; height: 2.1rem; border-radius: 10px;
 }
-.chip-ico svg { width: 1.15rem; height: 1.15rem; }
+.chip-ico svg { width: 1.1rem; height: 1.1rem; }
 .ico-amber { background: #fdf0dc; } .ico-amber svg { fill: #d08a1f; }
-.ico-mint  { background: #e4f4ee; } .ico-mint  svg { fill: #2f8f6b; }
-/* The wrapper is layout-neutral here so each chip keeps its own placement.
-   Positions assume a photo fills the right half — they sit over it. */
-.chips { display: contents; }
-.chip-1 { top: 38%; right: 11%; }
-.chip-2 { top: 56%; right: 18%; }
 
 /* ════════════════ CERTIFICATION MARQUEE ════════════════ */
 /* No heading here — the badges speak for themselves, so the band only needs
@@ -683,21 +703,20 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 1100px) {
   .tile-grid { grid-template-columns: repeat(2, 1fr); }
   .panel { padding: 2.2rem 2rem 2.5rem; }
-  .hero-card { width: min(24rem, 52%); padding: 1.7rem 1.6rem; }
-  .chip-1 { right: 3%; } .chip-2 { right: 8%; }
+  .col-chip { left: -0.6rem; }
 }
 
 @media (max-width: 860px) {
   /* Hero stacks: label → card → photo, chips ride the photo band */
-  /* Stacked layout: the cut-out and the floating chips have nowhere useful to
-     sit once the card goes full width, so the hero is the booking card alone. */
-  .panel { display: block; min-height: 0; padding: 1.6rem 1.4rem; border-radius: var(--r-lg); }
-  .panel-label { margin-bottom: 1.2rem; }
-  .hero-card {
-    width: 100%; margin: 0;
-    padding: 1.8rem 1.6rem; box-shadow: var(--shadow-m);
+  /* Copy first, collage under it */
+  .panel {
+    grid-template-columns: 1fr; min-height: 0;
+    padding: 1.8rem 1.4rem; border-radius: var(--r-lg);
   }
-  .panel-photo, .chips { display: none; }
+  .hero-collage { aspect-ratio: 1 / 0.95; max-width: 30rem; margin-inline: auto; }
+  .col-chip { left: -0.4rem; top: 44%; }
+  /* the right column is too narrow for the bar once stacked */
+  .col-offer { left: 0.7rem; right: 0.7rem; }
 
   .ba-grid { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; }
   .ba-grid { margin-bottom: 1.4rem; }
