@@ -372,10 +372,12 @@ a { color: inherit; text-decoration: none; }
 }
 .tile {
   position: relative;
+  display: flex; flex-direction: column;
   border-radius: var(--r-lg);
   padding: 1.8rem 1.6rem;
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
+.tile p { margin-bottom: 1.4rem; }
 .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-m); }
 .tile h3 { font-size: 1.12rem; margin-bottom: 0.4em; }
 .tile p { font-size: 0.92rem; margin: 0; color: var(--ink-2); }
@@ -383,6 +385,20 @@ a { color: inherit; text-decoration: none; }
 .tile-peach { background: var(--p-peach); }
 .tile-mint  { background: var(--p-mint); }
 .tile-lilac { background: var(--p-lilac); }
+
+/* Portrait clinic clip under each point. The tile is a column so the video
+   always sits at the bottom, however long the copy above it runs. */
+.tile-video {
+  /* height:auto is required — the width/height attributes land as a UA
+     presentational hint that would otherwise pin this to 1280px tall. */
+  display: block; width: 100%; height: auto;
+  aspect-ratio: 9 / 16;
+  margin-top: auto;
+  border-radius: var(--r);
+  background: var(--ink);
+  object-fit: cover;
+}
+.tile-video + * { margin-top: 1.2rem; }
 
 .tile-step {
   display: block; margin-bottom: 1.4rem;

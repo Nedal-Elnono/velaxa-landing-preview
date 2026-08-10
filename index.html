@@ -360,30 +360,52 @@
         planned around your case, comfort, and peace of mind.</p>
     </header>
 
-    <div class="tile-grid">
+    <!-- Each point carries its own clip. preload="none" keeps all 11MB off the
+           initial load: nothing downloads until a visitor presses play. -->
+      <div class="tile-grid">
       <article class="tile tile-blue">
         <span class="tile-step" aria-hidden="true">1</span>
         <h3>A Treatment Plan Built Around You</h3>
         <p>Your case is carefully evaluated before you travel to determine the right implant
           solution, treatment stages, and expected timeline.</p>
+        <video class="tile-video" controls playsinline preload="none"
+               width="720" height="1280" poster="assets/videos/poster-1.webp"
+               aria-label="Velaxa clinic footage: a treatment plan built around you">
+          <source src="assets/videos/story-1.mp4" type="video/mp4" />
+        </video>
       </article>
       <article class="tile tile-peach">
         <span class="tile-step" aria-hidden="true">2</span>
         <h3>Clinical Care You Can Trust</h3>
         <p>Your treatment is performed by an experienced dental team using advanced technology
           and trusted German and Swiss implant brands.</p>
+        <video class="tile-video" controls playsinline preload="none"
+               width="720" height="1280" poster="assets/videos/poster-2.webp"
+               aria-label="Velaxa clinic footage: clinical care you can trust">
+          <source src="assets/videos/story-2.mp4" type="video/mp4" />
+        </video>
       </article>
       <article class="tile tile-mint">
         <span class="tile-step" aria-hidden="true">3</span>
         <h3>One Team Handles Your Entire Journey</h3>
         <p>Your appointments, hotel accommodation, and VIP transfers are arranged in advance,
           so you can focus entirely on your treatment and recovery.</p>
+        <video class="tile-video" controls playsinline preload="none"
+               width="720" height="1280" poster="assets/videos/poster-3.webp"
+               aria-label="Velaxa clinic footage: one team handles your entire journey">
+          <source src="assets/videos/story-3.mp4" type="video/mp4" />
+        </video>
       </article>
       <article class="tile tile-lilac">
         <span class="tile-step" aria-hidden="true">4</span>
         <h3>Support That Continues After Treatment</h3>
         <p>Our team guides you between both visits and remains available for follow-up after
           you return home, with up to 15 years of treatment warranty.</p>
+        <video class="tile-video" controls playsinline preload="none"
+               width="720" height="1280" poster="assets/videos/poster-4.webp"
+               aria-label="Velaxa clinic footage: support that continues after treatment">
+          <source src="assets/videos/story-4.mp4" type="video/mp4" />
+        </video>
       </article>
     </div>
   </div>
