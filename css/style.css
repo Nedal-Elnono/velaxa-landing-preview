@@ -513,13 +513,42 @@ a { color: inherit; text-decoration: none; }
 /* A diagram sits above each title so the 4-vs-6 difference reads at a glance,
    before anyone starts comparing the two lists. Contain, not cover: these are
    technical illustrations and must not be cropped. */
+/* Two illustrations per package, flipped with the arrows. Every render was
+   normalised to the same subject height, so the arch stays the same size on
+   every slide and in both cards. */
+.plan-gallery { position: relative; overflow: hidden; margin-bottom: 1.2rem; }
+.plan-track { display: flex; transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
 .plan-figure {
-  /* Fixed height + contain: both renders were normalised to the same subject
-     height, so this makes the two arches appear at identical scale in the two
-     cards regardless of their differing widths. */
+  flex: 0 0 100%;
   display: block; width: 100%; height: 15rem;
   object-fit: contain;
-  margin-bottom: 1.2rem;
+}
+
+.gal-btn {
+  position: absolute; top: 50%; translate: 0 -50%;
+  display: grid; place-items: center;
+  width: 2.2rem; height: 2.2rem; padding: 0;
+  border: 1px solid var(--line); border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92); color: var(--navy);
+  cursor: pointer; opacity: 0.75;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+.gal-btn svg { width: 1.05rem; height: 1.05rem; }
+.gal-btn:hover { opacity: 1; background: var(--white); }
+.gal-prev { left: 0.2rem; }
+.gal-next { right: 0.2rem; }
+
+.gal-dots { display: flex; justify-content: center; gap: 0.4rem; margin-top: 0.5rem; }
+.gal-dots button {
+  width: 0.5rem; height: 0.5rem; padding: 0;
+  border: 0; border-radius: 50%; cursor: pointer;
+  background: var(--line);
+  transition: background 0.2s ease, width 0.2s ease;
+}
+.gal-dots button[aria-current="true"] { background: var(--sky); width: 1.2rem; border-radius: 999px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .plan-track { transition: none; }
 }
 .plan h3 {
   font-size: 1.5rem; font-weight: 700;

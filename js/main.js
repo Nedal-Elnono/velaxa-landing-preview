@@ -212,6 +212,61 @@ document.querySelectorAll(".marquee-track").forEach((track) => {
   Array.from(track.children).forEach(clone);
 });
 
+/* ── Package illustration galleries ───────────────────────
+   Arrows, dots, keyboard and swipe over a flex track. Works for any number of
+   slides, so a third illustration is just another <img> in the markup.
+─────────────────────────────────────────────────────────── */
+document.querySelectorAll("[data-gallery]").forEach((gallery) => {
+  const track = gallery.querySelector("[data-track]");
+  const dots = gallery.querySelector("[data-dots]");
+  const slides = Array.from(track.children);
+  if (slides.length < 2) {
+    gallery.querySelectorAll("button").forEach((b) => b.remove());
+    return;
+  }
+
+  let index = 0;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement("button");
+    dot.type = "button";
+    dot.setAttribute("aria-label", `Illustration ${i + 1} of ${slides.length}`);
+    dot.addEventListener("click", () => go(i));
+    dots.appendChild(dot);
+  });
+
+  function go(next) {
+    index = (next + slides.length) % slides.length;
+    track.style.transform = `translateX(-${index * 100}%)`;
+    Array.from(dots.children).forEach((d, i) =>
+      d.setAttribute("aria-current", String(i === index))
+    );
+    /* keep off-screen slides out of the tab order and the a11y tree */
+    slides.forEach((s, i) => (i === index ? s.removeAttribute("aria-hidden")
+                                          : s.setAttribute("aria-hidden", "true")));
+  }
+
+  gallery.querySelector("[data-prev]").addEventListener("click", () => go(index - 1));
+  gallery.querySelector("[data-next]").addEventListener("click", () => go(index + 1));
+
+  gallery.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
+    if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
+  });
+
+  /* Swipe, with a threshold so a scroll gesture is not read as a flick */
+  let startX = null;
+  gallery.addEventListener("pointerdown", (e) => { startX = e.clientX; }, { passive: true });
+  gallery.addEventListener("pointerup", (e) => {
+    if (startX === null) return;
+    const dx = e.clientX - startX;
+    if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
+    startX = null;
+  }, { passive: true });
+
+  go(0);
+});
+
 /* ── Before / after sliders ───────────────────────────────── */
 document.querySelectorAll("[data-ba]").forEach((box) => {
   const range = box.querySelector("input[type=range]");
