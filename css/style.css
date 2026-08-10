@@ -8,7 +8,8 @@
   /* Ground */
   --white: #ffffff;
   --ground: #ffffff;
-  --tint: #f7fafc;              /* alternating section wash */
+  --tint: #f7fafc;              /* form fields, menu hover */
+  --wash: #eef6fd;              /* the light-blue band between white sections */
 
   /* Brand palette — supplied by the client */
   --navy: #203f69;              /* headings, primary buttons */
@@ -82,7 +83,9 @@ a { color: inherit; text-decoration: none; }
 /* One width for the whole page, so the navbar always lines up with the hero panel */
 .shell { width: min(90%, var(--shell)); margin-inline: auto; }
 .section { padding-block: var(--pad); }
-.section-tint { background: var(--tint); }
+/* Sections alternate white / light blue so the page has a rhythm
+   instead of one flat white run. */
+.section-wash { background: var(--wash); }
 
 /* One accent word per heading — same family, italic, brand blue.
    No second typeface: the contrast comes from weight and colour. */
