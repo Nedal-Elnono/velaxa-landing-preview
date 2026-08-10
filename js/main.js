@@ -52,6 +52,56 @@ const REFERENCES = [
   "Friend or family", "Other",
 ];
 
+/* How many digits a national number has, per dialling code. Enough to reject a
+   number that is too short or too long before it ever reaches the sales team,
+   without pulling in a full phone-metadata library. */
+const PHONE_LENGTHS = {
+  "+1": [10], "+44": [9, 10], "+61": [9], "+353": [7, 8, 9], "+49": [6, 7, 8, 9, 10, 11],
+  "+33": [9], "+31": [9], "+32": [8, 9], "+41": [9], "+43": [7, 8, 9, 10, 11, 12, 13],
+  "+46": [7, 8, 9], "+47": [8], "+45": [8], "+358": [6, 7, 8, 9, 10, 11, 12],
+  "+39": [6, 7, 8, 9, 10, 11], "+34": [9], "+351": [9], "+30": [10], "+48": [9],
+  "+40": [9], "+64": [8, 9, 10], "+971": [9], "+966": [9], "+974": [8], "+965": [8],
+  "+52": [10], "+55": [10, 11], "+27": [9], "+81": [10],
+};
+
+/* Reads "+1 🇺🇸 USA" back to "+1" */
+const dialOf = (value) => (value || "").split(" ")[0];
+
+/**
+ * Returns an error message for a phone number, or "" when it looks valid.
+ * Only checks structure — it cannot know whether the line actually exists.
+ */
+function phoneError(dial, raw) {
+  let digits = (raw || "").replace(/\D/g, "");
+  if (!digits) return "Please enter your WhatsApp number.";
+
+  /* People often paste the country code into the field as well */
+  const dialDigits = dial.replace("+", "");
+  if (digits.startsWith(dialDigits) && digits.length > dialDigits.length) {
+    const rest = digits.slice(dialDigits.length);
+    if ((PHONE_LENGTHS[dial] || []).includes(rest.replace(/^0/, "").length)) digits = rest;
+  }
+  /* ...and the national trunk zero, e.g. UK 07700 or German 0151 */
+  digits = digits.replace(/^0/, "");
+
+  const allowed = PHONE_LENGTHS[dial];
+  if (!allowed) return digits.length < 6 ? "This number looks too short." : "";
+
+  if (!allowed.includes(digits.length)) {
+    const want = allowed.length === 1
+      ? `${allowed[0]} digits`
+      : `${allowed[0]}–${allowed[allowed.length - 1]} digits`;
+    const off = digits.length < allowed[0] ? "too short" : "too long";
+    return `That number is ${off}. A ${dial} number needs ${want} — you entered ${digits.length}.`;
+  }
+
+  /* North America: area code and exchange code cannot begin with 0 or 1 */
+  if (dial === "+1" && !/^[2-9]\d{2}[2-9]\d{6}$/.test(digits)) {
+    return "That is not a valid US or Canadian number — check the area code.";
+  }
+  return "";
+}
+
 /* ── WhatsApp links ───────────────────────────────────────── */
 document.querySelectorAll("[data-whatsapp]").forEach((el) => {
   el.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
@@ -187,6 +237,32 @@ function initLeadForm(form) {
     if (!isUS) state.value = "";
   });
 
+  /* ── WhatsApp number: reject a wrong digit count before it is submitted ── */
+  const phone = form.querySelector('input[type="tel"]');
+  const phoneNote = document.createElement("p");
+  phoneNote.className = "f-error";
+  phoneNote.hidden = true;
+  phone.closest(".f").appendChild(phoneNote);
+
+  const showPhoneError = (msg) => {
+    phoneNote.textContent = msg;
+    phoneNote.hidden = !msg;
+    phone.classList.toggle("bad", Boolean(msg));
+    phone.setAttribute("aria-invalid", msg ? "true" : "false");
+  };
+
+  const checkPhone = () => {
+    const msg = phone.value.trim() ? phoneError(dialOf(code.value), phone.value) : "";
+    showPhoneError(msg);
+    return !msg;
+  };
+
+  phone.addEventListener("blur", checkPhone);
+  /* Re-check on code change, but only once they've typed something */
+  code.addEventListener("change", () => { if (phone.value.trim()) checkPhone(); });
+  /* Clear the complaint while they are fixing it, don't nag mid-typing */
+  phone.addEventListener("input", () => showPhoneError(""));
+
   form.addEventListener("input", (e) => e.target.classList.remove("bad"));
 
   form.addEventListener("submit", async (e) => {
@@ -199,6 +275,11 @@ function initLeadForm(form) {
       if (empty) valid = false;
     });
     if (!valid) return setStatus("Please fill in the highlighted fields.", "err");
+
+    if (!checkPhone()) {
+      phone.focus();
+      return setStatus("Please check your WhatsApp number.", "err");
+    }
 
     const data = Object.fromEntries(new FormData(form).entries());
     data.submittedAt = new Date().toISOString();
