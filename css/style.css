@@ -514,10 +514,12 @@ a { color: inherit; text-decoration: none; }
    before anyone starts comparing the two lists. Contain, not cover: these are
    technical illustrations and must not be cropped. */
 .plan-figure {
-  width: 100%; height: auto;
-  aspect-ratio: 5 / 3;
+  /* Fixed height + contain: both renders were normalised to the same subject
+     height, so this makes the two arches appear at identical scale in the two
+     cards regardless of their differing widths. */
+  display: block; width: 100%; height: 15rem;
   object-fit: contain;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
 }
 .plan h3 {
   font-size: 1.5rem; font-weight: 700;
