@@ -7,9 +7,12 @@
    SHEET_ENDPOINT:  Google Apps Script Web App URL. While it is empty the
                     form validates and confirms without sending anywhere.
 ─────────────────────────────────────────────────────────────── */
-const WHATSAPP_NUMBER = "905000000000";
+const WHATSAPP_NUMBER = "905010367039";
 const WHATSAPP_MESSAGE = "Hi Velaxa! I'd like a free consultation for dental implants.";
-const SHEET_ENDPOINT = "";
+const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbygj8Jw5lrpe8aNRQrhSg-dK-l1dyvHKLc1WIyKJGJeQTGwQxBZPfb_fvSmQRdXqL_m7A/exec";
+/* Must match SHARED_TOKEN in sheet-apps-script.gs — the sheet drops anything
+   without it, which keeps bots that stumble on the endpoint out of your leads */
+const SHEET_TOKEN = "velaxa-2026-8f3ac1";
 
 /* ── Data ─────────────────────────────────────────────────── */
 /* One row per country: the residence dropdown, the dialling-code dropdown and
@@ -68,14 +71,35 @@ const US_STATES = [
   "Washington", "Washington D.C.", "West Virginia", "Wisconsin", "Wyoming",
 ];
 
-const REFERENCES = [
-  "Google search", "Facebook / Instagram", "YouTube", "TikTok",
-  "Friend or family", "Other",
+/* The treatment dropdown in the booking form — add or reword a line and the
+   option list follows; nothing else needs touching. */
+const TREATMENTS = [
+  "All on 6 Dental Implants",
+  "All on 4 Dental Implants",
+  "Hollywood smile",
+  "Veneers",
+  "I want a consultation to decide",
 ];
 
 
 /* Reads "+1 United States" back to "+1" */
 const dialOf = (value) => (value || "").split(" ")[0];
+
+/**
+ * Returns one number in international form: "+905526815449".
+ * The dial code has its own dropdown, but people routinely type it into the
+ * number field as well — prepending it blindly produced "+90 +905526815449".
+ * Normalising here, at the single point the lead is built, keeps the sheet and
+ * the thank-you page consistent without either of them repeating this rule.
+ */
+function normalizePhone(dial, raw) {
+  let value = (raw || "").trim();
+  if (!value) return "";
+  if (value.startsWith("00")) value = `+${value.slice(2)}`;   /* 00 90… → +90… */
+  if (value.startsWith("+")) return `+${value.slice(1).replace(/\D/g, "")}`;
+  /* A local number: drop the national trunk zero, then add the dial code */
+  return `${dial}${value.replace(/\D/g, "").replace(/^0/, "")}`;
+}
 
 /**
  * Returns an error message for a phone number, or "" when it looks valid.
@@ -110,6 +134,37 @@ function phoneError(dial, raw) {
     return "That is not a valid US or Canadian number — check the area code.";
   }
   return "";
+}
+
+/**
+ * Hands one lead to the Google Sheet without ever making the visitor wait.
+ *
+ * Apps Script answers a POST with a redirect to another Google origin, and the
+ * browser is not allowed to read that response — an `await fetch` here simply
+ * never settles, which left the button stuck on "Sending…" and the visitor
+ * short of WhatsApp. We do not need the reply: the row is written the moment
+ * Google receives the request.
+ *
+ * sendBeacon is built for exactly this — queued by the browser and delivered
+ * even though the page is navigating away a millisecond later. The Blob type
+ * keeps it a "simple" request so there is no CORS preflight for Apps Script to
+ * reject. fetch(keepalive) is only the fallback for a browser without it.
+ */
+function sendToSheet(data) {
+  /* The token travels with the lead but is never part of it */
+  const body = JSON.stringify({ ...data, token: SHEET_TOKEN });
+  const type = "text/plain;charset=UTF-8";
+
+  if (navigator.sendBeacon && navigator.sendBeacon(SHEET_ENDPOINT, new Blob([body], { type }))) return;
+
+  /* Deliberately not awaited */
+  fetch(SHEET_ENDPOINT, {
+    method: "POST",
+    headers: { "Content-Type": type },
+    body,
+    keepalive: true,
+    mode: "no-cors",
+  }).catch((err) => console.error("Could not reach the sheet", err));
 }
 
 /* ── WhatsApp links ───────────────────────────────────────── */
@@ -212,102 +267,6 @@ document.querySelectorAll(".marquee-track").forEach((track) => {
   Array.from(track.children).forEach(clone);
 });
 
-/* ── Package illustration galleries ───────────────────────
-   Arrows, dots, keyboard and swipe over a flex track. Works for any number of
-   slides, so a third illustration is just another <img> in the markup.
-─────────────────────────────────────────────────────────── */
-document.querySelectorAll("[data-gallery]").forEach((gallery) => {
-  const track = gallery.querySelector("[data-track]");
-  const dots = gallery.querySelector("[data-dots]");
-  const slides = Array.from(track.children);
-  if (slides.length < 2) {
-    gallery.querySelectorAll("button").forEach((b) => b.remove());
-    return;
-  }
-
-  let index = 0;
-
-  slides.forEach((_, i) => {
-    const dot = document.createElement("button");
-    dot.type = "button";
-    dot.setAttribute("aria-label", `Illustration ${i + 1} of ${slides.length}`);
-    dot.addEventListener("click", () => go(i));
-    dots.appendChild(dot);
-  });
-
-  function go(next) {
-    index = (next + slides.length) % slides.length;
-    track.style.transform = `translateX(-${index * 100}%)`;
-    Array.from(dots.children).forEach((d, i) =>
-      d.setAttribute("aria-current", String(i === index))
-    );
-    /* keep off-screen slides out of the tab order and the a11y tree */
-    slides.forEach((s, i) => (i === index ? s.removeAttribute("aria-hidden")
-                                          : s.setAttribute("aria-hidden", "true")));
-  }
-
-  gallery.querySelector("[data-prev]").addEventListener("click", () => go(index - 1));
-  gallery.querySelector("[data-next]").addEventListener("click", () => go(index + 1));
-
-  gallery.addEventListener("keydown", (e) => {
-    if (e.key === "ArrowLeft") { e.preventDefault(); go(index - 1); }
-    if (e.key === "ArrowRight") { e.preventDefault(); go(index + 1); }
-  });
-
-  /* ── Drag / swipe ──
-     The track follows the pointer live, then snaps on release. Pointer capture
-     is what makes it reliable: without it the browser hands the gesture to its
-     own image-drag or scroll handling and we never see the pointerup. */
-  let startX = 0, startY = 0, dragging = false;
-
-  const setOffset = (px) => {
-    track.style.transform = `translateX(calc(${-index * 100}% + ${px}px))`;
-  };
-
-  gallery.addEventListener("pointerdown", (e) => {
-    if (e.button !== 0 || e.target.closest("button")) return;
-    startX = e.clientX;
-    startY = e.clientY;
-    dragging = true;
-    track.style.transition = "none";
-    gallery.setPointerCapture(e.pointerId);
-  });
-
-  gallery.addEventListener("pointermove", (e) => {
-    if (!dragging) return;
-    const dx = e.clientX - startX;
-    /* a clearly vertical gesture is a page scroll, not a swipe — let it go */
-    if (Math.abs(e.clientY - startY) > Math.abs(dx) + 10) {
-      dragging = false;
-      track.style.transition = "";
-      go(index);
-      return;
-    }
-    setOffset(dx);
-  });
-
-  const endDrag = (e) => {
-    if (!dragging) return;
-    dragging = false;
-    track.style.transition = "";
-    const dx = e.clientX - startX;
-    /* a tenth of the card, or 40px, whichever is smaller */
-    const threshold = Math.min(40, gallery.offsetWidth * 0.1);
-    if (Math.abs(dx) > threshold) go(index + (dx < 0 ? 1 : -1));
-    else go(index);
-  };
-
-  gallery.addEventListener("pointerup", endDrag);
-  gallery.addEventListener("pointercancel", () => {
-    if (!dragging) return;
-    dragging = false;
-    track.style.transition = "";
-    go(index);
-  });
-
-  go(0);
-});
-
 /* ── Before / after sliders ───────────────────────────────── */
 document.querySelectorAll("[data-ba]").forEach((box) => {
   const range = box.querySelector("input[type=range]");
@@ -323,7 +282,7 @@ function initLeadForm(form) {
   const country = form.querySelector("[data-country]");
   const state = form.querySelector("[data-state]");
   const code = form.querySelector("[data-code]");
-  const ref = form.querySelector("[data-ref]");
+  const treatment = form.querySelector("[data-treatment]");
   const stateField = form.querySelector(".state-f");
   const status = form.querySelector(".f-status");
   const submit = form.querySelector("button[type=submit]");
@@ -334,8 +293,8 @@ function initLeadForm(form) {
   COUNTRIES.filter((c) => c.dial).forEach((c) =>
     code.add(new Option(`${c.flag} ${c.dial}`, `${c.dial} ${c.name}`))
   );
-  /* The short hero form omits Reference; the full form below has it */
-  if (ref) REFERENCES.forEach((r) => ref.add(new Option(r, r)));
+  /* The short hero form omits the treatment picker; the full form below has it */
+  if (treatment) TREATMENTS.forEach((t) => treatment.add(new Option(t, t)));
 
   /* ── WhatsApp number: reject a wrong digit count before it is submitted ── */
   const phone = form.querySelector('input[type="tel"]');
@@ -400,33 +359,38 @@ function initLeadForm(form) {
     }
 
     const data = Object.fromEntries(new FormData(form).entries());
+    data.whatsapp = normalizePhone(dialOf(code.value), data.whatsapp);
     data.submittedAt = new Date().toISOString();
     data.page = location.href;
 
     submit.disabled = true;
     submit.textContent = "Sending…";
 
+    if (SHEET_ENDPOINT) sendToSheet(data);
+    else console.info("SHEET_ENDPOINT not set — lead not sent:", data);
+
+    form.reset();
+    country.dispatchEvent(new Event("change"));
+    setStatus("Thank you! Taking you to the next step…", "ok");
+
+    /* Hand the lead to thank-you.html through sessionStorage rather than the
+       URL, so nothing personal lands in the address bar, history or a
+       referrer header. A browser with storage blocked just gets the
+       generic WhatsApp message on the other side. */
     try {
-      if (SHEET_ENDPOINT) {
-        /* Apps Script needs text/plain to avoid a CORS preflight */
-        await fetch(SHEET_ENDPOINT, {
-          method: "POST",
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify(data),
-        });
-      } else {
-        console.info("SHEET_ENDPOINT not set — lead not sent:", data);
-      }
-      form.reset();
-      country.dispatchEvent(new Event("change"));
-      setStatus("Thank you! Our team will reach you on WhatsApp within an hour.", "ok");
-    } catch (err) {
-      console.error(err);
-      setStatus("Something went wrong — please try again or message us on WhatsApp.", "err");
-    } finally {
-      submit.disabled = false;
-      submit.textContent = submitLabel;
+      sessionStorage.setItem("velaxaLead", JSON.stringify(data));
+    } catch (storageErr) {
+      console.warn("sessionStorage unavailable — sending a generic message", storageErr);
     }
+    location.assign("thank-you.html");
+  });
+
+  /* Navigating back from thank-you.html through the bfcache would otherwise
+     restore a disabled "Sending…" button */
+  addEventListener("pageshow", (e) => {
+    if (!e.persisted) return;
+    submit.disabled = false;
+    submit.textContent = submitLabel;
   });
 
   function setStatus(msg, kind) {

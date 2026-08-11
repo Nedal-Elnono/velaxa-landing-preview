@@ -523,73 +523,80 @@ a { color: inherit; text-decoration: none; }
 /* ════════════════ PACKAGES ════════════════ */
 .plan-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 27rem)); justify-content: center; gap: 1.5rem; }
 .plan {
-  position: relative; background: var(--white);
+  position: relative; overflow: hidden; background: var(--white);
   border: 1px solid var(--line); border-radius: var(--r-xl);
   padding: 2.2rem 2rem 2rem;
   /* column + auto margin keeps both cards' totals and buttons on one line,
      even though the two plans list a different number of inclusions */
   display: flex; flex-direction: column;
 }
-/* A diagram sits above each title so the 4-vs-6 difference reads at a glance,
-   before anyone starts comparing the two lists. Contain, not cover: these are
-   technical illustrations and must not be cropped. */
-/* Two illustrations per package, flipped with the arrows. Every render was
-   normalised to the same subject height, so the arch stays the same size on
-   every slide and in both cards. */
-.plan-gallery {
-  position: relative; overflow: hidden; margin-bottom: 1.2rem;
-  touch-action: pan-y;      /* keep vertical scrolling, claim horizontal drags */
-  cursor: grab;
+/* A ribbon along the top edge tells the two packages apart at a glance */
+.plan::before {
+  content: ""; position: absolute; inset: 0 0 auto; height: 5px;
 }
-.plan-gallery:active { cursor: grabbing; }
-.plan-track { display: flex; transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1); }
-.plan-figure {
-  flex: 0 0 100%;
-  display: block; width: 100%; height: 15rem;
-  object-fit: contain;
-  /* the browser's native image drag would swallow the gesture */
-  pointer-events: none; user-select: none; -webkit-user-drag: none;
-}
+.plan-a::before { background: linear-gradient(90deg, var(--sky), var(--teal)); }
+.plan-b::before { background: linear-gradient(90deg, var(--navy), var(--sky-2)); }
 
-.gal-btn {
-  position: absolute; top: 50%; translate: 0 -50%;
-  display: grid; place-items: center;
-  width: 2.2rem; height: 2.2rem; padding: 0;
-  border: 1px solid var(--line); border-radius: 50%;
-  background: rgba(255, 255, 255, 0.92); color: var(--navy);
-  cursor: pointer; opacity: 0.75;
-  transition: opacity 0.2s ease, background 0.2s ease;
-}
-.gal-btn svg { width: 1.05rem; height: 1.05rem; }
-.gal-btn:hover { opacity: 1; background: var(--white); }
-.gal-prev { left: 0.2rem; }
-.gal-next { right: 0.2rem; }
-
-.gal-dots { display: flex; justify-content: center; gap: 0.4rem; margin-top: 0.5rem; }
-.gal-dots button {
-  width: 0.5rem; height: 0.5rem; padding: 0;
-  border: 0; border-radius: 50%; cursor: pointer;
-  background: var(--line);
-  transition: background 0.2s ease, width 0.2s ease;
-}
-.gal-dots button[aria-current="true"] { background: var(--sky); width: 1.2rem; border-radius: 999px; }
-
-@media (prefers-reduced-motion: reduce) {
-  .plan-track { transition: none; }
-}
 .plan h3 {
-  font-size: 1.5rem; font-weight: 700;
-  text-align: center; margin-bottom: 1.4rem;
+  font-size: clamp(1.15rem, 2.4vw, 1.45rem); font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.01em;
+  text-align: center; padding-bottom: 1.2rem; margin-bottom: 1.2rem;
+  border-bottom: 1px solid var(--line);
 }
-.visit { border-top: 1px solid var(--line); padding-block: 1.1rem; }
-.visit-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.6rem; }
-.visit-top span { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sky); }
-.visit-top b { font-size: 1.45rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
-.visit ul li { position: relative; padding-left: 1.4rem; font-size: 0.92rem; margin-bottom: 0.35rem; }
-.visit ul li::before {
-  content: ""; position: absolute; left: 0; top: 0.62em;
-  width: 0.42rem; height: 0.42rem; border-radius: 50%; background: var(--sky-2);
+
+/* One priced panel per visit: tag + price on top, inclusions and the
+   illustration for that stage side by side underneath. */
+.visit {
+  background: var(--tint);
+  border: 1px solid var(--line); border-radius: var(--r);
+  padding: 1.1rem 1.1rem 1.2rem;
+  margin-bottom: 1.1rem;
 }
+.visit-top {
+  display: flex; justify-content: space-between; align-items: center; gap: 0.6rem;
+  padding-bottom: 0.9rem; margin-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+.visit-tag {
+  flex: none;
+  background: var(--navy); color: var(--white);
+  border-radius: 999px; padding: 0.4em 0.9em;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.visit-price { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.05; }
+.visit-price small {
+  font-size: 0.66rem; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--ink-2);
+}
+.visit-price b {
+  font-size: clamp(1.45rem, 3.4vw, 1.85rem); font-weight: 700;
+  color: var(--sky); font-variant-numeric: tabular-nums;
+}
+
+.visit-body { display: flex; align-items: center; gap: 0.6rem; }
+.visit-list { flex: 1 1 auto; min-width: 0; }
+.visit-list li {
+  display: flex; align-items: center; gap: 0.55rem;
+  font-size: 0.88rem; font-weight: 600; color: var(--ink);
+  margin-bottom: 0.55rem;
+}
+.visit-list li:last-child { margin-bottom: 0; }
+/* Circular chip per inclusion, mirroring the icon row in the reference */
+.vi {
+  flex: none; display: grid; place-items: center;
+  width: 1.85rem; height: 1.85rem; border-radius: 50%;
+  background: var(--white); border: 1px solid var(--line);
+}
+.vi svg { width: 0.95rem; height: 0.95rem; fill: var(--sky); }
+/* A fixed box, so both renders line up across visits and across cards even
+   though the source files have different aspect ratios. Contain, never crop:
+   these are technical illustrations. */
+.visit-figure {
+  flex: 0 0 38%; align-self: center;
+  width: 38%; height: 7.5rem;
+  object-fit: contain;
+}
+
 .plan-total {
   display: flex; justify-content: space-between; align-items: center;
   border-top: 1px solid var(--line); padding-block: 1.1rem;
@@ -597,6 +604,19 @@ a { color: inherit; text-decoration: none; }
 }
 .plan-total span { font-size: 0.9rem; }
 .plan-total b { font-size: 1.9rem; font-weight: 600; color: var(--ink); font-variant-numeric: tabular-nums; }
+
+.plan-trust {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  align-items: center; gap: 0.3rem 1rem;
+  margin: 0.9rem 0 0;
+  font-size: 0.76rem; font-weight: 600; color: var(--ink-2);
+}
+/* Dot separators between whichever items end up on the same line */
+.plan-trust span + span::before {
+  content: "·"; margin-right: 1rem; color: var(--line);
+}
+.pt-warranty { display: inline-flex; align-items: center; gap: 0.35rem; }
+.pt-warranty svg { width: 0.95rem; height: 0.95rem; fill: var(--wa); }
 
 /* ════════════════ BOOKING ════════════════ */
 .book-panel {
@@ -677,6 +697,44 @@ a { color: inherit; text-decoration: none; }
   .btn:hover, .tile:hover { transform: none; }
 }
 
+/* ════════════════ THANK-YOU PAGE ════════════════
+   thank-you.html only: one centred card that reads the submitted details back
+   and hands them to WhatsApp. */
+.ty-nav .nav-inner { justify-content: space-between; }
+.ty-main { display: grid; place-items: center; padding-block: clamp(2.5rem, 7vw, 5rem); }
+.ty-card {
+  max-width: 34rem; margin-inline: auto; text-align: center;
+  background: var(--white);
+  border: 1px solid var(--line); border-radius: var(--r-xl);
+  box-shadow: var(--shadow-s);
+  padding: clamp(1.6rem, 5vw, 2.8rem);
+}
+.ty-check {
+  display: grid; place-items: center;
+  width: 3.4rem; height: 3.4rem; margin: 0 auto 1.2rem;
+  border-radius: 50%; background: var(--wa); color: #fff;
+}
+.ty-check svg { width: 1.7rem; height: 1.7rem; }
+.ty-card h1 { font-size: clamp(1.8rem, 6vw, 2.4rem); margin-bottom: 0.7rem; }
+.ty-lede { color: var(--ink-2); margin-bottom: 1.6rem; }
+
+/* The details they are about to send, read back for confirmation */
+.ty-summary {
+  text-align: left; background: var(--tint);
+  border: 1px solid var(--line); border-radius: var(--r);
+  padding: 0.4rem 1rem; margin-bottom: 1.6rem;
+}
+.ty-summary li {
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  gap: 0.2rem 1rem; padding-block: 0.7rem;
+  font-size: 0.92rem;
+}
+.ty-summary li + li { border-top: 1px solid var(--line); }
+.ty-k { color: var(--ink-2); }
+.ty-v { color: var(--ink); font-weight: 600; text-align: right; word-break: break-word; }
+.ty-cta { font-size: 1.02rem; }
+.ty-fine { font-size: 0.85rem; color: var(--ink-2); margin: 1.1rem 0 0; }
+
 /* ════════════════════════════════════════════════════════════
    RESPONSIVE
    ════════════════════════════════════════════════════════════ */
@@ -713,10 +771,25 @@ a { color: inherit; text-decoration: none; }
     grid-template-columns: 1fr; min-height: 0;
     padding: 1.8rem 1.4rem; border-radius: var(--r-lg);
   }
+  /* The three points drop their pills and become icon-over-label columns */
+  .card-points {
+    /* minmax(0,·) so a long label wraps instead of widening the whole column */
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem 0.3rem; text-align: center;
+  }
+  .card-points li {
+    flex-direction: column; align-items: center; gap: 0.45em;
+    background: none; border: 0; border-radius: 0; padding: 0;
+    font-size: 0.74rem; line-height: 1.3;
+  }
+  .card-points svg { width: 1.55rem; height: 1.55rem; }
+
   .hero-collage { aspect-ratio: 1 / 0.95; max-width: 30rem; margin-inline: auto; }
-  .col-chip { left: -0.4rem; top: 44%; }
-  /* the right column is too narrow for the bar once stacked */
-  .col-offer { left: 0.7rem; right: 0.7rem; }
+  /* Both floating cards come off the collage — the copy above already says it */
+  .col-chip, .col-offer { display: none; }
+
+  /* The step number only buys empty space here — the heading starts at the top */
+  .tile-step { display: none; }
 
   .ba-grid { grid-template-columns: 1fr; max-width: 30rem; margin-inline: auto; }
   .ba-grid { margin-bottom: 1.4rem; }
@@ -725,6 +798,17 @@ a { color: inherit; text-decoration: none; }
 }
 
 @media (max-width: 560px) {
+  /* Narrow phones: trim the card chrome so a line like "4 days in 5 star hotel"
+     still fits beside the illustration instead of wrapping */
+  .plan { padding: 1.7rem 1.1rem 1.4rem; }
+  .visit { padding: 0.9rem; }
+  .visit-list li { font-size: 0.8rem; gap: 0.45rem; margin-bottom: 0.5rem; }
+  .vi { width: 1.6rem; height: 1.6rem; }
+  .vi svg { width: 0.85rem; height: 0.85rem; }
+  .visit-figure { flex: 0 0 31%; width: 31%; height: 6.4rem; }
+  .plan-trust { gap: 0.25rem 0.7rem; font-size: 0.72rem; }
+  .plan-trust span + span::before { margin-right: 0.7rem; }
+
   .tile-grid { grid-template-columns: 1fr; }
   .marquee-quotes .marquee-track li { width: 18rem; }
   .f-row { grid-template-columns: 1fr; }

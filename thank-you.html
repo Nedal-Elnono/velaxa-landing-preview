@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Thank You — Velaxa Clinic</title>
+  <meta name="description" content="Your consultation request has been received. Send your details to the Velaxa team on WhatsApp for the fastest reply." />
+  <!-- A confirmation page has no business in search results -->
+  <meta name="robots" content="noindex, nofollow" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/style.css?v=15" />
+  <link rel="icon" href="assets/favicon.png" />
+</head>
+<body>
+
+<header class="nav ty-nav">
+  <div class="shell nav-inner">
+    <a href="index.html" class="logo" aria-label="Velaxa Clinic — home">
+      <span class="logo-icon" aria-hidden="true"></span>
+      <span class="logo-word" role="img" aria-label="Velaxa"></span>
+    </a>
+    <a href="index.html" class="pill-btn">
+      Back to site
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</header>
+
+<main class="ty-main">
+  <div class="shell">
+    <div class="ty-card">
+      <span class="ty-check" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+
+      <p class="rule-label center">Request received</p>
+      <h1>Thank You<span class="accent" data-ty-name></span></h1>
+
+      <p class="ty-lede">
+        Your request is with our team. For the fastest reply, send it to us on
+        WhatsApp now &mdash; the message is already written, all you have to do is press send.
+      </p>
+
+      <ul class="ty-summary" data-ty-summary role="list" hidden></ul>
+
+      <a class="btn btn-wa btn-full ty-cta" data-ty-wa href="#">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
+        Send My Details on WhatsApp
+      </a>
+
+      <p class="ty-fine">
+        Our English-speaking team replies within one hour during working hours.
+      </p>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="foot-base">
+      <a href="index.html" class="logo">
+        <span class="logo-icon" aria-hidden="true"></span>
+        <span class="logo-word" role="img" aria-label="Velaxa"></span>
+      </a>
+      <p>Istanbul, Türkiye · TDP Certified · ISO Certified · Health in Türkiye Accredited</p>
+      <p class="fine">© <span id="year"></span> Velaxa Clinic. Results vary by patient; the final plan is confirmed after clinical examination.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ════════════════════════════════════════════════════════════
+   Thank-you page — turns the submitted form into one ready-to-send
+   WhatsApp message. Standalone on purpose: js/main.js drives the
+   homepage's nav and forms, none of which exist here.
+   ════════════════════════════════════════════════════════════ */
+
+/* Same number as WHATSAPP_NUMBER in js/main.js — international, digits only */
+const WHATSAPP_NUMBER = "905010367039";
+const FALLBACK_MESSAGE = "Hello Velaxa! I just requested a free consultation on your website and I'd like to continue here.";
+
+/* The lead is handed over by the form in sessionStorage, so a direct visit or a
+   reopened tab legitimately finds nothing — that case gets the generic message. */
+let lead = null;
+try {
+  lead = JSON.parse(sessionStorage.getItem("velaxaLead") || "null");
+} catch (err) {
+  console.warn("Could not read the submitted details", err);
+}
+
+/* "+1 United States" → "+1" */
+const dialOf = (value) => (value || "").split(" ")[0];
+
+/* The dial code is its own dropdown, but plenty of people type it into the number
+   field as well. Prepend it only when what they typed is clearly a local number,
+   otherwise "+90" + "+905526815449" reads back as a doubled code. */
+function formatPhone(d) {
+  const raw = (d.whatsapp || "").trim();
+  if (!raw) return "";
+  if (raw.startsWith("+")) return raw;              // already international
+  if (raw.startsWith("00")) return `+${raw.slice(2)}`;  // 00 is the same thing
+  return [dialOf(d.countryCode), raw].filter(Boolean).join(" ");
+}
+
+/* Only the fields worth repeating back, in the order they were asked */
+function summaryRows(d) {
+  const place = [d.country, d.state].filter(Boolean).join(" — ");
+  return [
+    ["Name", d.fullName],
+    ["Country", place],
+    ["WhatsApp", formatPhone(d)],
+    ["Treatment", d.treatment],
+  ].filter(([, value]) => value && String(value).trim());
+}
+
+/* Written as the visitor would write it — who they are, where they are from and
+   what they want — so it reads like their own message, not a form dump. Every
+   part is optional: a missing field drops its clause instead of leaving a gap. */
+function buildMessage(d) {
+  const name = (d.fullName || "").trim();
+  const place = [d.country, d.state].filter(Boolean).join(", ");
+  const treatment = (d.treatment || "").trim();
+
+  const sentences = [];
+
+  const intro = [name && `My name is ${name}`, place && `I'm from ${place}`]
+    .filter(Boolean).join(" and ");
+  if (intro) sentences.push(`${intro}.`);
+
+  if (treatment) {
+    /* "I want a consultation to decide" is not a treatment name — it would read
+       as "I'm interested in I want a consultation to decide" */
+    sentences.push(/consultation to decide/i.test(treatment)
+      ? "I'd like a consultation to help me decide which treatment is right for me."
+      : `I'm interested in ${treatment}.`);
+  }
+
+  /* No number here on purpose: WhatsApp already shows the clinic who is writing */
+
+  return sentences.length
+    ? `Hello Velaxa!\n${sentences.join(" ")}`
+    : FALLBACK_MESSAGE;
+}
+
+const rows = lead ? summaryRows(lead) : [];
+const message = lead ? buildMessage(lead) : FALLBACK_MESSAGE;
+
+/* The WhatsApp button */
+const waLink = document.querySelector("[data-ty-wa]");
+waLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+waLink.target = "_blank";
+waLink.rel = "noopener";
+
+/* Greet them by first name when we have one */
+const firstName = (lead && lead.fullName ? String(lead.fullName).trim().split(/\s+/)[0] : "");
+if (firstName) document.querySelector("[data-ty-name]").textContent = `, ${firstName}`;
+
+/* Read the details back, so they can see exactly what is about to be sent.
+   textContent throughout — never innerHTML with anything a visitor typed. */
+const summary = document.querySelector("[data-ty-summary]");
+if (rows.length) {
+  rows.forEach(([label, value]) => {
+    const li = document.createElement("li");
+    const k = document.createElement("span");
+    k.className = "ty-k";
+    k.textContent = label;
+    const v = document.createElement("span");
+    v.className = "ty-v";
+    v.textContent = value;
+    li.append(k, v);
+    summary.appendChild(li);
+  });
+  summary.hidden = false;
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
+</body>
+</html>

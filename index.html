@@ -11,7 +11,8 @@
   <!-- Only the five faces the stylesheet actually uses: 400/500/600/700 + italic 700 -->
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/style.css" />
+  <!-- ?v= bumps the cache; raise it whenever style.css changes -->
+  <link rel="stylesheet" href="css/style.css?v=15" />
   <link rel="icon" href="assets/favicon.png" />
 
   <!-- The hero cut-out is the largest-contentful paint; start it with the HTML -->
@@ -281,78 +282,117 @@
         you return to your home happily with your new smile.</p>
     </header>
 
+    <!-- Each visit is its own priced panel, with the illustration for that stage
+         beside its inclusions. Illustration filenames are historical: the
+         "plan4-*" pair are the implants-in-jaw renders (a = 4 posts, b = 6) and
+         the "plan6-*" pair are the bridge-above-abutments renders (a = 4, b = 6),
+         so the 6-implant card correctly uses plan4-b and plan6-b. -->
     <div class="plan-grid">
-      <article class="plan">
-        <div class="plan-gallery" data-gallery>
-          <div class="plan-track" data-track>
-            <img class="plan-figure" src="assets/plan6-a.webp"
-                 width="567" height="700" loading="lazy" decoding="async" alt="Abutments fitted on the lower jaw, ready for a full-arch bridge" />
-            <img class="plan-figure" src="assets/plan6-b.webp"
-                 width="587" height="700" loading="lazy" decoding="async" alt="Abutments fitted on the lower jaw with the bridge above" />
-          </div>
-          <button class="gal-btn gal-prev" type="button" data-prev aria-label="Previous illustration">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="gal-btn gal-next" type="button" data-next aria-label="Next illustration">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="gal-dots" data-dots></div>
-        </div>
+      <article class="plan plan-a">
         <h3>All on 6 Dental Implants</h3>
 
         <div class="visit">
-          <div class="visit-top"><span>1st visit for only</span><b>$3,800</b></div>
-          <ul role="list">
-            <li>12 Dental Implants</li><li>Temporary Teeth</li>
-            <li>4 days in 5 star hotel</li><li>VIP transfers</li>
-          </ul>
+          <div class="visit-top">
+            <span class="visit-tag">1st visit</span>
+            <span class="visit-price"><small>for only</small><b>$3,800</b></span>
+          </div>
+          <div class="visit-body">
+            <ul class="visit-list" role="list">
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C8.8 2 6.4 3.9 6.4 6.6c0 1.6.5 2.6 1 3.9.2.6.4 1.2.5 1.9h8.2c.1-.7.3-1.3.5-1.9.5-1.3 1-2.3 1-3.9C17.6 3.9 15.2 2 12 2Zm-3.4 12 .5 1.7h5.8l.5-1.7H8.6Zm1 3.4.5 1.7h3.8l.5-1.7H9.6Zm1 3.4.9 2.7h.9l1-2.7h-2.8Z"/></svg></span>12 Dental Implants</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2c-3.3 0-6 2.2-6 5.5 0 2.1.6 3.4 1.2 5.3.5 1.6.8 3.3 1 5.4.1 1.3.6 2.8 1.8 2.8 1.1 0 1.4-1.1 1.5-2.4.1-1.1.2-2.3.5-2.3s.4 1.2.5 2.3c.1 1.3.4 2.4 1.5 2.4 1.2 0 1.7-1.5 1.8-2.8.2-2.1.5-3.8 1-5.4.6-1.9 1.2-3.2 1.2-5.3C18 4.2 15.3 2 12 2Z"/></svg></span>Temporary Teeth</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3h9a1 1 0 0 1 1 1v4h4a1 1 0 0 1 1 1v12H4V4a1 1 0 0 1 1-1Zm2 3v2h2V6H7Zm4 0v2h2V6h-2ZM7 10v2h2v-2H7Zm4 0v2h2v-2h-2Zm-4 4v2h2v-2H7Zm4 0v2h2v-2h-2Zm6 0v2h2v-2h-2Zm-6 4v3h2v-3h-2Zm6 0v2h2v-2h-2Z"/></svg></span>4 days in 5 star hotel</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.6 6h10.8a2 2 0 0 1 1.9 1.4L20.6 12H3.4l1.3-4.6A2 2 0 0 1 6.6 6ZM3 13h18a1 1 0 0 1 1 1v3h-2.1a2.9 2.9 0 0 0-5.8 0h-2.2a2.9 2.9 0 0 0-5.8 0H2v-3a1 1 0 0 1 1-1Z"/><circle cx="7" cy="17.4" r="1.7"/><circle cx="17" cy="17.4" r="1.7"/></svg></span>VIP transfers</li>
+            </ul>
+            <img class="visit-figure" src="assets/plan4-b.webp"
+                 width="869" height="700" loading="lazy" decoding="async"
+                 alt="Six implants placed in the lower jaw" />
+          </div>
         </div>
+
         <div class="visit">
-          <div class="visit-top"><span>2nd visit for only</span><b>$3,000</b></div>
-          <ul role="list">
-            <li>20 Zirconium Crowns</li><li>5 days in 5 star hotel</li><li>VIP transfers</li>
-          </ul>
+          <div class="visit-top">
+            <span class="visit-tag">2nd visit</span>
+            <span class="visit-price"><small>for only</small><b>$3,000</b></span>
+          </div>
+          <div class="visit-body">
+            <ul class="visit-list" role="list">
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 8l4.5 3L12 4l5.5 7L22 8l-2 11H4L2 8Z"/></svg></span>20 Zirconium Crowns</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3h9a1 1 0 0 1 1 1v4h4a1 1 0 0 1 1 1v12H4V4a1 1 0 0 1 1-1Zm2 3v2h2V6H7Zm4 0v2h2V6h-2ZM7 10v2h2v-2H7Zm4 0v2h2v-2h-2Zm-4 4v2h2v-2H7Zm4 0v2h2v-2h-2Zm6 0v2h2v-2h-2Zm-6 4v3h2v-3h-2Zm6 0v2h2v-2h-2Z"/></svg></span>5 days in 5 star hotel</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.6 6h10.8a2 2 0 0 1 1.9 1.4L20.6 12H3.4l1.3-4.6A2 2 0 0 1 6.6 6ZM3 13h18a1 1 0 0 1 1 1v3h-2.1a2.9 2.9 0 0 0-5.8 0h-2.2a2.9 2.9 0 0 0-5.8 0H2v-3a1 1 0 0 1 1-1Z"/><circle cx="7" cy="17.4" r="1.7"/><circle cx="17" cy="17.4" r="1.7"/></svg></span>VIP transfers</li>
+            </ul>
+            <img class="visit-figure" src="assets/plan6-b.webp"
+                 width="587" height="700" loading="lazy" decoding="async"
+                 alt="A full-arch zirconium bridge above six fitted abutments" />
+          </div>
         </div>
 
         <div class="plan-total"><span>Both visits</span><b>$6,800</b></div>
-        <a href="#book" class="btn btn-dark btn-full">Book Your Treatment Today</a>
+        <a href="#book" class="btn btn-dark btn-full">
+          Book Your Package Today
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="plan-trust">
+          <span class="pt-warranty">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.5-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4-6.1 6.1Z"/></svg>
+            15-Year Warranty
+          </span>
+          <span>No Hidden Fees</span>
+          <span>VIP Transfers</span>
+        </p>
       </article>
 
-      <article class="plan">
-        <div class="plan-gallery" data-gallery>
-          <div class="plan-track" data-track>
-            <img class="plan-figure" src="assets/plan4-a.webp"
-                 width="860" height="700" loading="lazy" decoding="async" alt="Cutaway view of implants supporting a full-arch bridge" />
-            <img class="plan-figure" src="assets/plan4-b.webp"
-                 width="869" height="700" loading="lazy" decoding="async" alt="Cutaway view of implants supporting a full-arch bridge" />
-          </div>
-          <button class="gal-btn gal-prev" type="button" data-prev aria-label="Previous illustration">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <button class="gal-btn gal-next" type="button" data-next aria-label="Next illustration">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="gal-dots" data-dots></div>
-        </div>
+      <article class="plan plan-b">
         <h3>All on 4 Dental Implants</h3>
 
         <div class="visit">
-          <div class="visit-top"><span>1st visit for only</span><b>$3,200</b></div>
-          <ul role="list">
-            <li>8 Dental Implants</li><li>Temporary Teeth</li>
-            <li>4 days in 5 star hotel</li><li>VIP transfers</li>
-          </ul>
+          <div class="visit-top">
+            <span class="visit-tag">1st visit</span>
+            <span class="visit-price"><small>for only</small><b>$3,200</b></span>
+          </div>
+          <div class="visit-body">
+            <ul class="visit-list" role="list">
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2C8.8 2 6.4 3.9 6.4 6.6c0 1.6.5 2.6 1 3.9.2.6.4 1.2.5 1.9h8.2c.1-.7.3-1.3.5-1.9.5-1.3 1-2.3 1-3.9C17.6 3.9 15.2 2 12 2Zm-3.4 12 .5 1.7h5.8l.5-1.7H8.6Zm1 3.4.5 1.7h3.8l.5-1.7H9.6Zm1 3.4.9 2.7h.9l1-2.7h-2.8Z"/></svg></span>8 Dental Implants</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2c-3.3 0-6 2.2-6 5.5 0 2.1.6 3.4 1.2 5.3.5 1.6.8 3.3 1 5.4.1 1.3.6 2.8 1.8 2.8 1.1 0 1.4-1.1 1.5-2.4.1-1.1.2-2.3.5-2.3s.4 1.2.5 2.3c.1 1.3.4 2.4 1.5 2.4 1.2 0 1.7-1.5 1.8-2.8.2-2.1.5-3.8 1-5.4.6-1.9 1.2-3.2 1.2-5.3C18 4.2 15.3 2 12 2Z"/></svg></span>Temporary Teeth</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3h9a1 1 0 0 1 1 1v4h4a1 1 0 0 1 1 1v12H4V4a1 1 0 0 1 1-1Zm2 3v2h2V6H7Zm4 0v2h2V6h-2ZM7 10v2h2v-2H7Zm4 0v2h2v-2h-2Zm-4 4v2h2v-2H7Zm4 0v2h2v-2h-2Zm6 0v2h2v-2h-2Zm-6 4v3h2v-3h-2Zm6 0v2h2v-2h-2Z"/></svg></span>4 days in 5 star hotel</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.6 6h10.8a2 2 0 0 1 1.9 1.4L20.6 12H3.4l1.3-4.6A2 2 0 0 1 6.6 6ZM3 13h18a1 1 0 0 1 1 1v3h-2.1a2.9 2.9 0 0 0-5.8 0h-2.2a2.9 2.9 0 0 0-5.8 0H2v-3a1 1 0 0 1 1-1Z"/><circle cx="7" cy="17.4" r="1.7"/><circle cx="17" cy="17.4" r="1.7"/></svg></span>VIP transfers</li>
+            </ul>
+            <img class="visit-figure" src="assets/plan4-a.webp"
+                 width="860" height="700" loading="lazy" decoding="async"
+                 alt="Four implants placed in the lower jaw" />
+          </div>
         </div>
+
         <div class="visit">
-          <div class="visit-top"><span>2nd visit for only</span><b>$3,000</b></div>
-          <ul role="list">
-            <li>20 Zirconium Crowns</li><li>2 Titanium bars</li>
-            <li>5 days in 5 star hotel</li><li>VIP transfers</li>
-          </ul>
+          <div class="visit-top">
+            <span class="visit-tag">2nd visit</span>
+            <span class="visit-price"><small>for only</small><b>$3,000</b></span>
+          </div>
+          <div class="visit-body">
+            <ul class="visit-list" role="list">
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M2 8l4.5 3L12 4l5.5 7L22 8l-2 11H4L2 8Z"/></svg></span>20 Zirconium Crowns</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10h18a2 2 0 0 1 0 4H3a2 2 0 0 1 0-4Zm2.2 1.2a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6Zm13.6 0a.8.8 0 1 0 0 1.6.8.8 0 0 0 0-1.6Z"/></svg></span>2 Titanium bars</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 3h9a1 1 0 0 1 1 1v4h4a1 1 0 0 1 1 1v12H4V4a1 1 0 0 1 1-1Zm2 3v2h2V6H7Zm4 0v2h2V6h-2ZM7 10v2h2v-2H7Zm4 0v2h2v-2h-2Zm-4 4v2h2v-2H7Zm4 0v2h2v-2h-2Zm6 0v2h2v-2h-2Zm-6 4v3h2v-3h-2Zm6 0v2h2v-2h-2Z"/></svg></span>5 days in 5 star hotel</li>
+              <li><span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6.6 6h10.8a2 2 0 0 1 1.9 1.4L20.6 12H3.4l1.3-4.6A2 2 0 0 1 6.6 6ZM3 13h18a1 1 0 0 1 1 1v3h-2.1a2.9 2.9 0 0 0-5.8 0h-2.2a2.9 2.9 0 0 0-5.8 0H2v-3a1 1 0 0 1 1-1Z"/><circle cx="7" cy="17.4" r="1.7"/><circle cx="17" cy="17.4" r="1.7"/></svg></span>VIP transfers</li>
+            </ul>
+            <img class="visit-figure" src="assets/plan6-a.webp"
+                 width="567" height="700" loading="lazy" decoding="async"
+                 alt="A full-arch zirconium bridge above four fitted abutments" />
+          </div>
         </div>
 
         <div class="plan-total"><span>Both visits</span><b>$6,200</b></div>
-        <a href="#book" class="btn btn-dark btn-full">Book Your Treatment Today</a>
+        <a href="#book" class="btn btn-dark btn-full">
+          Book Your Package Today
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h13M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="plan-trust">
+          <span class="pt-warranty">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.4 8 11 4.6-1.6 8-6 8-11V5l-8-3Zm-1.2 14.5-3.3-3.3 1.4-1.4 1.9 1.9 4.7-4.7 1.4 1.4-6.1 6.1Z"/></svg>
+            15-Year Warranty
+          </span>
+          <span>No Hidden Fees</span>
+          <span>VIP Transfers</span>
+        </p>
       </article>
     </div>
 
@@ -470,8 +510,8 @@
         </div>
 
         <div class="f">
-          <label for="ref">Reference <span class="opt">— how did you hear about us?</span></label>
-          <select id="ref" name="reference" data-ref>
+          <label for="treatment">Which Treatment are you interested in?</label>
+          <select id="treatment" name="treatment" data-treatment>
             <option value="" selected>Choose one…</option>
           </select>
         </div>
@@ -501,6 +541,6 @@
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm5.4 14.1c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1a13 13 0 0 1-5.9-5.2c-.6-1-1-2.1-.9-3 0-.8.5-1.5 1-1.9.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .6l-.4.6c-.2.2-.3.4-.1.7a9.6 9.6 0 0 0 3.8 3.4c.3.1.5.1.6-.1l.7-.9c.2-.3.4-.3.7-.2l1.9.9c.3.1.5.2.5.4 0 .1 0 .7-.2 1.4Z"/></svg>
 </a>
 
-<script src="js/main.js"></script>
+<script src="js/main.js?v=15"></script>
 </body>
 </html>
