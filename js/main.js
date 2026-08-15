@@ -6,6 +6,9 @@
    WHATSAPP_NUMBER: international format, digits only (no +, no spaces)
    SHEET_ENDPOINT:  Google Apps Script Web App URL. While it is empty the
                     form validates and confirms without sending anywhere.
+   CRM_WEBHOOK:     LeadConnector inbound webhook. Every lead is posted to it
+                    as JSON; empty disables the CRM leg without touching
+                    anything else.
 ─────────────────────────────────────────────────────────────── */
 const WHATSAPP_NUMBER = "905010367039";
 const WHATSAPP_MESSAGE = "Hi Velaxa! I'd like a free consultation for dental implants.";
@@ -13,6 +16,7 @@ const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbygj8Jw5lrpe8aNR
 /* Must match SHARED_TOKEN in sheet-apps-script.gs — the sheet drops anything
    without it, which keeps bots that stumble on the endpoint out of your leads */
 const SHEET_TOKEN = "velaxa-2026-8f3ac1";
+const CRM_WEBHOOK = "https://services.leadconnectorhq.com/hooks/9Eazr6Ofq15lkLIspovc/webhook-trigger/e77f96be-bb62-4498-964e-6703b598815b";
 
 /* ── Data ─────────────────────────────────────────────────── */
 /* One row per country: the residence dropdown, the dialling-code dropdown and
@@ -165,6 +169,67 @@ function sendToSheet(data) {
     keepalive: true,
     mode: "no-cors",
   }).catch((err) => console.error("Could not reach the sheet", err));
+}
+
+/**
+ * Reshapes one lead into the flat JSON the CRM reads.
+ *
+ * Two rules the CRM side depends on, so please keep them when editing:
+ *   1. Every key is always present — an empty string rather than a missing
+ *      field. Support maps the fields once from the first lead they see; a key
+ *      that only appears when the visitor happens to fill it in cannot be
+ *      mapped, and later leads would silently drop that value.
+ *   2. Keys are flat snake_case. LeadConnector picks fields up automatically
+ *      from the top level of the object; nesting hides them.
+ */
+function crmPayload(data) {
+  const fullName = (data.fullName || "").trim().replace(/\s+/g, " ");
+  const space = fullName.indexOf(" ");
+  const params = new URLSearchParams(location.search);
+
+  return {
+    first_name: space === -1 ? fullName : fullName.slice(0, space),
+    last_name:  space === -1 ? ""       : fullName.slice(space + 1),
+    full_name:  fullName,
+    /* Already E.164 (+905551234567) — normalizePhone ran before we got here */
+    phone:      data.whatsapp || "",
+    country:    data.country || "",
+    state:      data.state || "",
+    treatment:  data.treatment || "",
+    source:     "Velaxa Landing Page",
+    page_url:   data.page || location.href,
+    submitted_at: data.submittedAt || new Date().toISOString(),
+    /* Ad attribution: which campaign paid for this lead */
+    utm_source:   params.get("utm_source") || "",
+    utm_medium:   params.get("utm_medium") || "",
+    utm_campaign: params.get("utm_campaign") || "",
+    utm_content:  params.get("utm_content") || "",
+    utm_term:     params.get("utm_term") || "",
+  };
+}
+
+/**
+ * Posts one lead to the CRM webhook as JSON.
+ *
+ * Not awaited, for the same reason as sendToSheet: the visitor is on their way
+ * to thank-you.html a millisecond later and must not wait for a round trip.
+ * `keepalive` is what makes that safe — the browser finishes the request after
+ * the page is gone instead of cancelling it mid-flight.
+ *
+ * A real (not no-cors) request, because the webhook answers preflight with
+ * `access-control-allow-origin: *`. That costs one OPTIONS round trip and buys
+ * a readable status code, so a webhook that starts rejecting leads shows up in
+ * the console instead of failing silently.
+ */
+function sendToCRM(data) {
+  fetch(CRM_WEBHOOK, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(crmPayload(data)),
+    keepalive: true,
+  })
+    .then((res) => { if (!res.ok) console.error("CRM webhook rejected the lead", res.status); })
+    .catch((err) => console.error("Could not reach the CRM webhook", err));
 }
 
 /* ── WhatsApp links ───────────────────────────────────────── */
@@ -366,8 +431,13 @@ function initLeadForm(form) {
     submit.disabled = true;
     submit.textContent = "Sending…";
 
+    /* Two independent destinations: the sheet is the archive we control, the
+       CRM is where the team works the lead. Neither can block the other. */
     if (SHEET_ENDPOINT) sendToSheet(data);
-    else console.info("SHEET_ENDPOINT not set — lead not sent:", data);
+    else console.info("SHEET_ENDPOINT not set — lead not sent to the sheet:", data);
+
+    if (CRM_WEBHOOK) sendToCRM(data);
+    else console.info("CRM_WEBHOOK not set — lead not sent to the CRM:", data);
 
     form.reset();
     country.dispatchEvent(new Event("change"));
