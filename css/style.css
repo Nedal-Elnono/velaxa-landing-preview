@@ -641,6 +641,10 @@ a { color: inherit; text-decoration: none; }
   background: var(--white); border-radius: var(--r-lg);
   padding: 2rem 1.9rem; box-shadow: var(--shadow-l);
 }
+/* The embedded CRM form brings its own fields and spacing; the card only
+   frames it. form_embed.js resizes the iframe to the form's real height. */
+.book-embed { padding: 0.6rem; }
+.book-embed iframe { display: block; width: 100%; }
 .f { margin-bottom: 1rem; }
 .f label { display: block; font-size: 0.82rem; font-weight: 500; color: var(--ink); margin-bottom: 0.35rem; }
 .f .opt { font-weight: 400; color: var(--ink-2); }
@@ -814,4 +818,5 @@ a { color: inherit; text-decoration: none; }
   .f-row { grid-template-columns: 1fr; }
   .state-f.hidden { display: none; }
   .book-form { padding: 1.5rem 1.3rem; }
+  .book-embed { padding: 0.4rem; }
 }

@@ -40,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,700&display=swap" rel="stylesheet" />
 
   <!-- ?v= bumps the cache; raise it whenever style.css changes -->
-  <link rel="stylesheet" href="css/style.css?v=18" />
+  <link rel="stylesheet" href="css/style.css?v=19" />
   <link rel="icon" href="assets/favicon.png" />
 
   <!-- The hero cut-out is the largest-contentful paint; start it with the HTML -->
@@ -513,45 +513,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="book-fine">Your details stay private. English-speaking team.</p>
       </div>
 
-      <form class="book-form lead-form" novalidate>
-        <div class="f">
-          <label for="name">Full name</label>
-          <input type="text" id="name" name="fullName" placeholder="John Carter" autocomplete="name" required />
-        </div>
-
-        <div class="f-row">
-          <div class="f">
-            <label for="country">Country residence</label>
-            <select id="country" name="country" data-country required>
-              <option value="" selected disabled>Select country</option>
-            </select>
-          </div>
-          <div class="f state-f">
-            <label for="state">State</label>
-            <select id="state" name="state" data-state>
-              <option value="" selected disabled>Select state</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="f">
-          <label for="phone">WhatsApp number</label>
-          <div class="f-phone">
-            <select id="code" name="countryCode" data-code aria-label="Country code"></select>
-            <input type="tel" id="phone" name="whatsapp" placeholder="(415) 555-0123" autocomplete="tel" required />
-          </div>
-        </div>
-
-        <div class="f">
-          <label for="treatment">Which Treatment are you interested in?</label>
-          <select id="treatment" name="treatment" data-treatment>
-            <option value="" selected>Choose one…</option>
-          </select>
-        </div>
-
-        <button type="submit" class="btn btn-dark btn-full">Book Your Consultation Now</button>
-        <p class="f-status" role="status" aria-live="polite"></p>
-      </form>
+      <!-- The clinic's own CRM form (GoHighLevel white-label at api.esinix.com),
+           embedded as they supplied it. It submits straight into their account,
+           so a lead no longer passes through js/main.js, the Google Sheet or the
+           LeadConnector webhook. The redirect to thank-you.html after a submit is
+           configured inside their form settings, not here. -->
+      <div class="book-form book-embed">
+        <iframe
+          src="https://api.esinix.com/widget/form/o1ul9Rj0OxDEYn6h6mJB"
+          style="width:100%;height:666px;border:none;border-radius:8px"
+          id="inline-o1ul9Rj0OxDEYn6h6mJB"
+          data-layout="{'id':'INLINE'}"
+          data-trigger-type="alwaysShow"
+          data-trigger-value=""
+          data-activation-type="alwaysActivated"
+          data-activation-value=""
+          data-deactivation-type="neverDeactivate"
+          data-deactivation-value=""
+          data-form-name="Landing Page"
+          data-height="666"
+          data-layout-iframe-id="inline-o1ul9Rj0OxDEYn6h6mJB"
+          data-form-id="o1ul9Rj0OxDEYn6h6mJB"
+          data-cookie-consent="true"
+          data-cookie-consent-provider="auto"
+          title="Landing Page"
+        ></iframe>
+        <script src="https://api.esinix.com/js/form_embed.js"></script>
+      </div>
     </div>
   </div>
 </section>
